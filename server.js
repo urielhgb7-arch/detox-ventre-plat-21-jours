@@ -396,7 +396,7 @@ app.get('/api/checkout/verify', async (req, res) => {
       || cart?.orderUrl 
       || cart?.invoiceUrl 
       || process.env.MAKETOU_DOWNLOAD_URL 
-      || null;
+      || 'https://portal.maketou.com';
 
     return res.status(200).json({
       verified: true,

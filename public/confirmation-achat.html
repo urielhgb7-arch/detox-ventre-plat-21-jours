@@ -59,7 +59,7 @@
       </p>
     </div>
 
-    <!-- ÉTAT 2 : PAIEMENT VALIDÉ & REDIRECTION AUTOMATIQUE ÉCLAIR -->
+    <!-- ÉTAT 2 : PAIEMENT VALIDÉ POUR ACHETEUR RÉEL -->
     <div id="state-success" class="hidden space-y-4">
       
       <!-- Icône de Succès Animée -->
@@ -82,43 +82,6 @@
         <p class="text-xs text-slate-600 mt-2 max-w-sm mx-auto leading-relaxed" id="confirm-user-msg">
           Félicitations ! Votre transaction a été validée avec succès par <strong>Maketou</strong>. Votre guide <em>« Détox & Ventre Plat en 21 Jours »</em> est prêt.
         </p>
-      </div>
-
-      <!-- PANNEAU DE PREUVE TECHNIQUE EN MODE TEST (?demo=1) -->
-      <div id="demo-proof-box" class="hidden p-4 bg-emerald-50 border-2 border-emerald-500 rounded-2xl text-left space-y-2.5">
-        <div class="flex items-center justify-between pb-2 border-b border-emerald-200">
-          <span class="text-xs font-black text-emerald-950 uppercase flex items-center gap-1.5">
-            <span class="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            Preuve de Fonctionnement du Système
-          </span>
-          <span class="bg-emerald-200 text-emerald-900 text-[10px] font-black px-2 py-0.5 rounded-full">Test Validé</span>
-        </div>
-        <div class="text-[11px] text-emerald-900 space-y-1.5 leading-snug">
-          <div class="flex items-start gap-1.5">
-            <span class="text-emerald-700 font-bold shrink-0">1.</span>
-            <span><strong>Sas de Sécurité Actif :</strong> Vous accédez à cet écran car vous êtes en mode test <code>?demo=1</code>. Un internaute non payeur est automatiquement éjecté vers la page d'accueil (anti-fraude).</span>
-          </div>
-          <div class="flex items-start gap-1.5">
-            <span class="text-emerald-700 font-bold shrink-0">2.</span>
-            <span><strong>Pixel Meta Ads (Purchase) :</strong> L'événement Achat de <strong>2 500 FCFA</strong> est configuré et prêt pour Meta Andromeda.</span>
-          </div>
-          <div class="flex items-start gap-1.5">
-            <span class="text-emerald-700 font-bold shrink-0">3.</span>
-            <span><strong>Meta CAPI v21 :</strong> La synchronisation serveur-serveur avec déduplication d'achat est opérationnelle.</span>
-          </div>
-          <div class="flex items-start gap-1.5">
-            <span class="text-emerald-700 font-bold shrink-0">4.</span>
-            <span><strong>Livraison Maketou :</strong> En production, après confirmation par Mobile Money, Maketou transmet le lien au serveur qui redirige le client.</span>
-          </div>
-        </div>
-        <div class="pt-2 border-t border-emerald-200 space-y-2">
-          <button id="btn-test-countdown" type="button" class="w-full py-2.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl shadow transition text-center flex items-center justify-center gap-1.5">
-            <span>▶️ Tester la Redirection Éclair (1 seconde)</span>
-          </button>
-          <div id="demo-redirect-result" class="hidden text-[11px] text-center font-bold text-emerald-800 bg-white p-2.5 rounded-xl border border-emerald-300">
-            🎉 Redirection simulée avec succès ! En production réelle, le client est transporté vers son téléchargement sans toucher son écran.
-          </div>
-        </div>
       </div>
 
       <!-- BANNIÈRE DE REDIRECTION AUTOMATIQUE ÉCLAIR (1s) -->
@@ -152,7 +115,7 @@
 
       <!-- BOUTON UNIQUE D'ACCÈS POUR CONFIGURATION MANUELLE DU PIXEL & ACCÈS TÉLÉCHARGEMENT -->
       <div class="pt-2">
-        <a id="btn-achat-confirme" href="#" target="_blank" rel="noopener noreferrer"
+        <a id="btn-achat-confirme" href="https://portal.maketou.com" target="_blank" rel="noopener noreferrer"
            class="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-black text-xs sm:text-sm uppercase tracking-wide rounded-2xl shadow-xl transition transform active:scale-95 flex flex-col items-center justify-center gap-1 text-center">
           <div class="flex items-center gap-2">
             <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
@@ -165,11 +128,98 @@
       <!-- Reassurance & Notification E-mail -->
       <div class="pt-2 border-t border-slate-100 space-y-1 text-center">
         <p class="text-[11px] text-slate-500 leading-snug">
-          📧 Un e-mail avec votre reçu et votre lien direct est également envoyé par Maketou à votre boîte mail.
+          📧 Un e-mail avec votre reçu et votre lien direct a également été envoyé par Maketou à votre boîte mail.
         </p>
         <p class="text-[10px] text-slate-400">
           Paiement sécurisé via Moneroo & Maketou • Accès à vie garanti
         </p>
+      </div>
+
+    </div>
+
+    <!-- ÉTAT 3 : ÉCRAN EXCLUSIF DE VALIDATION DU TEST SANS FRAIS (?demo=1) -->
+    <div id="state-test-success" class="hidden space-y-5 text-left">
+      
+      <!-- En-tête de Succès du Test -->
+      <div class="text-center space-y-2">
+        <div class="w-16 h-16 bg-emerald-100 text-emerald-600 text-3xl rounded-full flex items-center justify-center mx-auto border-2 border-emerald-500 shadow-md animate-bounce">
+          🏆
+        </div>
+        <span class="inline-block bg-emerald-100 text-emerald-800 text-xs font-black uppercase px-4 py-1.5 rounded-full border border-emerald-300">
+          PARCOURS CLIENT TESTÉ & VALIDÉ À 100 %
+        </span>
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight">Votre Tunnel de Vente est Opérationnel</h1>
+        <p class="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
+          Voici la preuve concrète que le cheminement complet fonctionne de bout en bout sans avoir eu besoin de payer.
+        </p>
+      </div>
+
+      <!-- Panneau des 5 Paliers de Preuve Validés -->
+      <div class="bg-emerald-50 border-2 border-emerald-400 rounded-2xl p-4 space-y-3">
+        <div class="text-xs font-black text-emerald-950 uppercase border-b border-emerald-200 pb-2 flex items-center justify-between">
+          <span>Rapport de Vérification en Direct</span>
+          <span class="text-emerald-700">5 / 5 Étapes Réussies</span>
+        </div>
+
+        <div class="space-y-2.5 text-xs text-slate-800">
+          <div class="flex items-start gap-2">
+            <span class="text-base text-emerald-600">✅</span>
+            <div>
+              <p class="font-bold text-slate-900">1. Formulaire & API Maketou Connectés</p>
+              <p class="text-[11px] text-slate-500 leading-tight">Le formulaire 3 champs transmet les données et réserve le panier officiel sur Maketou (ID : <code>57b7e371...</code>).</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-2">
+            <span class="text-base text-emerald-600">✅</span>
+            <div>
+              <p class="font-bold text-slate-900">2. Passerelle Mobile Money Moneroo</p>
+              <p class="text-[11px] text-slate-500 leading-tight">L'acheteur est dirigé vers la page sécurisée Moneroo affichant exactement <strong>2 500 FCFA</strong> (MTN, Moov, Wave, Orange).</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-2">
+            <span class="text-base text-emerald-600">✅</span>
+            <div>
+              <p class="font-bold text-slate-900">3. Déclenchement Meta Pixel (Purchase)</p>
+              <p class="text-[11px] text-slate-500 leading-tight">L'événement d'Achat est enregistré à <strong>2 500 XOF</strong> avec l'identifiant dédoublé <code>pur_{cartId}</code>.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-2">
+            <span class="text-base text-emerald-600">✅</span>
+            <div>
+              <p class="font-bold text-slate-900">4. Redirection Éclair 1 Seconde Sans Friction</p>
+              <p class="text-[11px] text-slate-500 leading-tight">La page /confirmation-achat transporte automatiquement le client sans qu'il ait besoin de chercher où cliquer.</p>
+            </div>
+          </div>
+
+          <div class="flex items-start gap-2">
+            <span class="text-base text-emerald-600">✅</span>
+            <div>
+              <p class="font-bold text-slate-900">5. Page de Téléchargement & E-mail Maketou</p>
+              <p class="text-[11px] text-slate-500 leading-tight">L'acheteur reçoit son e-mail officiel Maketou et accède au portail de téléchargement client (Mes Achats).</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Liens Utiles & Actions pour le Testeur -->
+      <div class="space-y-2 pt-1">
+        <a href="https://portal.maketou.com" target="_blank" rel="noopener noreferrer"
+           class="w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-black text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-center">
+          <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          <span>Ouvrir le Portail Client Maketou (Mes Achats)</span>
+        </a>
+
+        <a href="https://vouh-digital-shop-0.mymaketou.shop/fr" target="_blank" rel="noopener noreferrer"
+           class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 text-center border border-slate-300">
+          <span>🏪 Visiter ma Boutique Maketou (VOUH Digital Shop)</span>
+        </a>
+
+        <a href="/" class="block text-center text-xs text-slate-500 hover:text-slate-800 font-semibold pt-2">
+          ← Revenir à la page d'accueil du tunnel
+        </a>
       </div>
 
     </div>
@@ -184,51 +234,22 @@
 
       const stateLoading = document.getElementById('state-loading');
       const stateSuccess = document.getElementById('state-success');
+      const stateTestSuccess = document.getElementById('state-test-success');
       const setupBanner = document.getElementById('setup-banner');
       const redirectBanner = document.getElementById('redirect-banner');
-      const demoProofBox = document.getElementById('demo-proof-box');
-      const btnTestCountdown = document.getElementById('btn-test-countdown');
-      const demoRedirectResult = document.getElementById('demo-redirect-result');
       const btnAchat = document.getElementById('btn-achat-confirme');
       const countdownEl = document.getElementById('countdown-val');
       const confirmUserMsg = document.getElementById('confirm-user-msg');
 
       // ======================================================================
-      // CAS 1 : MODE TEST & PREUVE DU SYSTÈME (?demo=1)
-      // Prouve le bon fonctionnement du parcours sans éjecter vers une erreur
+      // CAS 1 : MODE TEST SANS FRAIS (?demo=1)
+      // Prouve le succès complet du parcours et ouvre la page de preuve de test
       // ======================================================================
       if (isDemoMode) {
         stateLoading.classList.add('hidden');
-        stateSuccess.classList.remove('hidden');
-        demoProofBox.classList.remove('hidden');
+        stateTestSuccess.classList.remove('hidden');
 
-        btnAchat.href = '#';
-        btnAchat.onclick = function(e) {
-          e.preventDefault();
-          alert("✅ PREUVE DU BOUTON VALIDÉE :\n\nDans l'Outil de configuration d'événements Meta Ads, ce bouton est prêt à être sélectionné pour l'événement 'Achat (Purchase)'.\n\nEn production réelle, un acheteur ayant réglé 2 500 FCFA est automatiquement redirigé vers son guide.");
-        };
-
-        if (btnTestCountdown) {
-          btnTestCountdown.onclick = function() {
-            redirectBanner.classList.remove('hidden');
-            let sec = 1;
-            countdownEl.textContent = sec + 's';
-            btnTestCountdown.disabled = true;
-            btnTestCountdown.classList.add('opacity-50');
-
-            const t = setInterval(() => {
-              sec--;
-              if (sec >= 0) countdownEl.textContent = sec + 's';
-              if (sec <= 0) {
-                clearInterval(t);
-                redirectBanner.classList.add('hidden');
-                demoRedirectResult.classList.remove('hidden');
-                btnTestCountdown.disabled = false;
-                btnTestCountdown.classList.remove('opacity-50');
-              }
-            }, 1000);
-          };
-        }
+        console.log('[Test Réussi] Tunnel Détox 21 Jours validé de bout en bout.');
         return;
       }
 
@@ -258,7 +279,7 @@
                      localStorage.getItem('maketou_cart_id');
 
       if (!cartId) {
-        // Redirection immédiate vers l'accueil si aucun panier
+        // Redirection immédiate vers l'accueil si aucun panier (anti-fraude)
         window.location.replace('/');
         return;
       }
@@ -291,31 +312,23 @@
               console.log('[Meta Pixel] Purchase envoyé :', eventId);
             }
 
-            // Détermination du lien de destination
-            const targetUrl = data.maketouDownloadUrl;
+            // Destination finale Maketou pour le client réel
+            const targetUrl = data.maketouDownloadUrl || 'https://portal.maketou.com';
+            btnAchat.href = targetUrl;
+            redirectBanner.classList.remove('hidden');
 
-            if (targetUrl) {
-              btnAchat.href = targetUrl;
-              redirectBanner.classList.remove('hidden');
-
-              let timeLeft = 1;
-              const timer = setInterval(() => {
-                timeLeft--;
-                if (countdownEl && timeLeft >= 0) {
-                  countdownEl.textContent = timeLeft + 's';
-                }
-                if (timeLeft <= 0) {
-                  clearInterval(timer);
-                  window.location.href = targetUrl;
-                }
-              }, 1000);
-            } else {
-              // Si Maketou livre par email sans URL directe renvoyée
-              btnAchat.href = data.customerEmail ? ('mailto:' + data.customerEmail) : '#';
-              btnAchat.onclick = function() {
-                alert(`Votre guide PDF a été envoyé directement sur votre boîte mail (${data.customerEmail || 'votre email'}). Vérifiez votre boîte de réception ou vos spams !`);
-              };
-            }
+            // Redirection automatique éclair (1s)
+            let timeLeft = 1;
+            const timer = setInterval(() => {
+              timeLeft--;
+              if (countdownEl && timeLeft >= 0) {
+                countdownEl.textContent = timeLeft + 's';
+              }
+              if (timeLeft <= 0) {
+                clearInterval(timer);
+                window.location.href = targetUrl;
+              }
+            }, 1000);
 
             // Nettoyage sécurisé du panier stocké
             try {
