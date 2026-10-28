@@ -494,9 +494,20 @@
           throw new Error(errorText);
         }
 
-        // Sauvegarde immédiate du cartId dans localStorage avant redirection
+        // Sauvegarde multi-niveaux ultra-résistante (Cookie + localStorage + sessionStorage)
         if (data.cartId) {
-          localStorage.setItem('maketou_cart_id', data.cartId);
+          try {
+            localStorage.setItem('maketou_cart_id', data.cartId);
+            sessionStorage.setItem('maketou_cart_id', data.cartId);
+            document.cookie = "maketou_cart_id=" + encodeURIComponent(data.cartId) + "; path=/; max-age=86400; SameSite=Lax";
+          } catch(e) {}
+        }
+        if (data.orderId) {
+          try {
+            localStorage.setItem('maketou_order_id', data.orderId);
+            sessionStorage.setItem('maketou_order_id', data.orderId);
+            document.cookie = "maketou_order_id=" + encodeURIComponent(data.orderId) + "; path=/; max-age=86400; SameSite=Lax";
+          } catch(e) {}
         }
 
         window.location.href = data.redirectUrl;

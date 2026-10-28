@@ -68,19 +68,39 @@ function verifyHmacSignature(orderId, sig) {
 
 function formatAfricanPhone(rawPhone) {
   let cleaned = String(rawPhone || '').replace(/[^0-9]/g, '');
+  // Si déjà avec indicatif 229
   if (cleaned.startsWith('229')) {
     let national = cleaned.slice(3);
-    if (national.length === 9 && national.startsWith('1')) {
+    if (national.length === 8) {
+      national = '01' + national;
+    } else if (national.length === 9 && national.startsWith('1')) {
       national = '0' + national;
     }
     return '+229' + national;
   }
+  // Si déjà avec indicatif 225 (Côte d'Ivoire)
   if (cleaned.startsWith('225')) {
     let national = cleaned.slice(3);
-    if (national.length === 9) {
-      national = '0' + national;
+    if (national.length === 8) {
+      national = '0' + national; // ex: 05, 07
     }
     return '+225' + national;
+  }
+  // Si déjà avec indicatif 221 (Sénégal)
+  if (cleaned.startsWith('221')) {
+    return '+221' + cleaned.slice(3);
+  }
+  // Numéro béninois 10 chiffres (nouveau plan de numérotation 01...)
+  if (cleaned.length === 10 && (cleaned.startsWith('01') || cleaned.startsWith('02') || cleaned.startsWith('03'))) {
+    return '+229' + cleaned;
+  }
+  // Numéro béninois 8 chiffres ancien plan (97, 66, 61...)
+  if (cleaned.length === 8 && (cleaned.startsWith('9') || cleaned.startsWith('6') || cleaned.startsWith('5') || cleaned.startsWith('4'))) {
+    return '+22901' + cleaned;
+  }
+  // Numéro ivoirien 10 chiffres (05, 07, 01...)
+  if (cleaned.length === 10 && (cleaned.startsWith('05') || cleaned.startsWith('07') || cleaned.startsWith('01'))) {
+    return '+225' + cleaned;
   }
   return '+' + cleaned;
 }
@@ -209,20 +229,20 @@ app.post('/api/checkout/create', async (req, res) => {
       });
     }
 
-    // 4. Construction de la redirectURL vers notre page intermédiaire /confirmation-achat
+    // 4. Construction de la redirectURL vers notre page de remerciement et téléchargement
     const orderId = 'ORD_' + crypto.randomUUID().replace(/-/g, '').slice(0, 16);
     const host = req.headers['x-forwarded-host'] || req.headers.host || '';
     const proto = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
     const baseDomain = (process.env.APP_BASE_URL || (proto + '://' + host)).replace(/\/$/, '');
 
-    let redirectURL = 'https://detox-21-jours.aurakadre.com/confirmation-achat';
+    let redirectURL = `https://detox-21-jours.aurakadre.com/remerciement?orderId=${orderId}`;
     let webhookUrl = undefined;
     if (baseDomain.startsWith('https://') && !baseDomain.includes('localhost')) {
-      redirectURL = `${baseDomain}/confirmation-achat`;
+      redirectURL = `${baseDomain}/remerciement?orderId=${orderId}`;
       webhookUrl = `${baseDomain}/api/webhooks/maketou`;
     }
 
-    // 5. Payload officiel Maketou
+    // 5. Payload officiel Maketou avec tolérance multi-noms pour redirectURL
     const payload = {
       productDocumentId,
       email: cleanEmail,
@@ -230,6 +250,8 @@ app.post('/api/checkout/create', async (req, res) => {
       lastName,
       phone: cleanPhone,
       redirectURL,
+      redirectUrl: redirectURL,
+      returnUrl: redirectURL,
       meta: {
         productSlug: 'detox-21-jours',
         internalOrderId: String(orderId),
@@ -273,6 +295,7 @@ app.post('/api/checkout/create', async (req, res) => {
     const orderData = {
       orderId,
       cartId: cart.id || '',
+      paymentId: cart.paymentId || '',
       idempotencyHash,
       email: cleanEmail,
       phone: cleanPhone,
@@ -298,12 +321,24 @@ app.post('/api/checkout/create', async (req, res) => {
       ordersDB[cart.id] = orderData;
       watchMaketouCartStatus(cart.id, apiKey);
     }
+    if (cart.paymentId) {
+      ordersDB[cart.paymentId] = orderData;
+    }
     saveDB();
+
+    // Transmission de cookies SameSite=Lax pour persistance cross-redirect
+    try {
+      if (cart.id) {
+        res.cookie('maketou_cart_id', cart.id, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
+      }
+      res.cookie('maketou_order_id', orderId, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
+    } catch (e) {}
 
     return res.status(200).json({
       cartId: cart.id,
       redirectUrl: redirectUrl,
-      orderId: orderId
+      orderId: orderId,
+      paymentId: cart.paymentId || ''
     });
   } catch (err) {
     const status = err.response?.status || 500;
@@ -323,15 +358,43 @@ app.post('/api/checkout/create', async (req, res) => {
 app.get('/api/checkout/verify', async (req, res) => {
   try {
     readDB();
-    const { cartId, setup_pixel } = req.query;
+    const { cartId, orderId, paymentId, setup_pixel } = req.query;
 
     // Permet à l'Outil de configuration d'événements Meta d'afficher la page et le bouton en mode configuration :
     if (setup_pixel === '1') {
       return res.status(200).json({ verified: true, setupMode: true, alreadyTracked: false });
     }
 
-    if (!cartId) {
-      return res.status(400).json({ verified: false, error: 'Identifiant cartId manquant.' });
+    // Extraction de cartId depuis paramètre URL, cookies ou base locale
+    let cookieCartId = '';
+    if (req.headers.cookie) {
+      const match = req.headers.cookie.match(/maketou_cart_id=([^;]+)/);
+      if (match) {
+        cookieCartId = decodeURIComponent(match[1].trim());
+      }
+    }
+
+    let targetCartId = cartId || cookieCartId;
+    let order = undefined;
+
+    if (targetCartId) {
+      order = ordersDB[targetCartId] || Object.values(ordersDB).find(o => o.cartId === targetCartId);
+    }
+    if (!targetCartId && orderId) {
+      order = ordersDB[orderId] || Object.values(ordersDB).find(o => o.orderId === orderId);
+      if (order && order.cartId) targetCartId = order.cartId;
+    }
+    if (!targetCartId && paymentId) {
+      order = ordersDB[paymentId] || Object.values(ordersDB).find(o => o.paymentId === paymentId);
+      if (order && order.cartId) targetCartId = order.cartId;
+    }
+
+    if (!targetCartId) {
+      return res.status(200).json({
+        verified: false,
+        status: 'waiting_info',
+        message: 'Panier en cours de localisation'
+      });
     }
 
     const apiKey = process.env.MAKETOU_API_KEY || 'msk_c650508aa6e29d8d7da5a9c2ea05cd20d081f29a89566fe1e3da0b79c080a4c8';
@@ -339,43 +402,45 @@ app.get('/api/checkout/verify', async (req, res) => {
     // Interrogation de l'API Maketou
     let cart = null;
     try {
-      const r = await axios.get(`https://api.maketou.net/api/v1/stores/cart/${cartId}`, {
+      const r = await axios.get(`https://api.maketou.net/api/v1/stores/cart/${targetCartId}`, {
         headers: { 'Authorization': `Bearer ${apiKey}` },
         timeout: 8000
       });
       const cartData = r.data;
       cart = cartData?.cart || cartData;
     } catch (apiErr) {
-      console.warn(`[Maketou Status Check Warning] Panier ${cartId}:`, apiErr.message);
+      console.warn(`[Maketou Status Check Warning] Panier ${targetCartId}:`, apiErr.message);
     }
 
-    let order = ordersDB[cartId] || Object.values(ordersDB).find(o => o.cartId === cartId);
-
-    // Si Maketou retourne completed OU si notre webhook l'a déjà marqué completed
-    const isCompleted = cart?.status === 'completed' || order?.status === 'completed';
+    // Statuts acceptés comme paiement validé
+    const paidStatuses = ['completed', 'paid', 'success', 'successful', 'finished', 'delivered'];
+    const cartStatus = String(cart?.status || '').toLowerCase();
+    const orderStatus = String(order?.status || '').toLowerCase();
+    const isCompleted = paidStatuses.includes(cartStatus) || paidStatuses.includes(orderStatus);
 
     if (!isCompleted) {
       return res.status(200).json({
         verified: false,
-        status: cart?.status || order?.status || 'waiting_payment'
+        status: cartStatus || orderStatus || 'waiting_payment',
+        cartId: targetCartId
       });
     }
 
     if (!order) {
       order = {
-        cartId,
-        orderId: 'ORD_' + cartId.slice(0, 12),
-        email: cart?.email || '',
-        phone: cart?.phone || '',
-        firstName: cart?.firstName || '',
-        lastName: cart?.lastName || '',
+        cartId: targetCartId,
+        orderId: 'ORD_' + targetCartId.slice(0, 12),
+        email: cart?.customerInfo?.email || cart?.email || '',
+        phone: cart?.customerInfo?.phone || cart?.phone || '',
+        firstName: cart?.customerInfo?.firstName || cart?.firstName || '',
+        lastName: cart?.customerInfo?.lastName || cart?.lastName || '',
         productDocumentId: cart?.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '57b7e371-6c0c-4262-bc58-e4cfe48da606',
         amount: 2500,
         status: 'completed',
         purchaseTracked: false,
         purchase_tracked: 0
       };
-      ordersDB[cartId] = order;
+      ordersDB[targetCartId] = order;
     }
 
     order.status = 'completed';
@@ -389,20 +454,20 @@ app.get('/api/checkout/verify', async (req, res) => {
       );
     }
 
-    // Récupération de toute URL de téléchargement ou reçu renvoyée par Maketou
+    // Récupération de l'URL directe de livraison et téléchargement Maketou
     const maketouDownloadUrl = cart?.downloadUrl 
       || cart?.fileUrl 
       || cart?.receiptUrl 
-      || cart?.orderUrl 
-      || cart?.invoiceUrl 
+      || `https://vouh-digital-shop-0.mymaketou.shop/fr/purchases/${targetCartId}`
       || process.env.MAKETOU_DOWNLOAD_URL 
       || 'https://portal.maketou.com';
 
     return res.status(200).json({
       verified: true,
+      cartId: targetCartId,
       alreadyTracked,
-      eventId: `pur_${cartId}`,
-      customerEmail: cart?.email || order.email,
+      eventId: `pur_${targetCartId}`,
+      customerEmail: cart?.customerInfo?.email || cart?.email || order.email,
       maketouDownloadUrl
     });
   } catch (e) {
@@ -482,19 +547,78 @@ app.post('/api/webhooks/maketou', (req, res) => {
   return res.status(200).json({ received: true });
 });
 
+// ============================================================================
+// ENDPOINT SÉCURISÉ : TÉLÉCHARGEMENT & LECTURE DU GUIDE PDF
+// (Le lien Google Drive n'est JAMAIS exposé au client pour une sécurité absolue)
+// ============================================================================
+app.get('/api/download/guide', async (req, res) => {
+  try {
+    const localPdfPath = path.join(__dirname, 'storage', 'guide_detox_21_jours.pdf');
+    const isDownload = req.query.download === '1';
+
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader(
+      'Content-Disposition',
+      isDownload
+        ? 'attachment; filename="Programme_Detox_Ventre_Plat_21_Jours.pdf"'
+        : 'inline; filename="Programme_Detox_Ventre_Plat_21_Jours.pdf"'
+    );
+    res.setHeader('Cache-Control', 'private, no-transform, max-age=3600');
+    res.setHeader('X-Content-Type-Options', 'nosniff');
+
+    if (fs.existsSync(localPdfPath)) {
+      const stream = fs.createReadStream(localPdfPath);
+      return stream.pipe(res);
+    }
+
+    // Secours dynamique via Google Drive si le fichier local n'est pas trouvé (côté serveur uniquement)
+    const driveFileId = process.env.GOOGLE_DRIVE_FILE_ID || '1hltSYrpr5EoDWMl5gj7mx2TGGfiu1AlK';
+    const driveUrl = `https://drive.google.com/uc?export=download&id=${driveFileId}`;
+    console.log('[Download Secure] Streaming de secours depuis Google Drive (interne)...');
+    
+    const driveRes = await axios.get(driveUrl, {
+      responseType: 'stream',
+      timeout: 20000,
+      headers: { 'User-Agent': 'Mozilla/5.0' }
+    });
+
+    return driveRes.data.pipe(res);
+  } catch (err) {
+    console.error('[Download Guide Exception]', err.message);
+    return res.status(500).send('Erreur lors du téléchargement du guide. Veuillez réessayer ou contacter le support.');
+  }
+});
+
 // Pages HTML
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Page intermédiaire /confirmation-achat (Configuration manuelle Meta Pixel + Livraison Maketou)
+// Page officielle de Remerciement & Téléchargement du Guide
+app.get('/remerciement', (req, res) => {
+  if (req.query.cartId) {
+    res.cookie('maketou_cart_id', req.query.cartId, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
+  }
+  if (req.query.orderId) {
+    res.cookie('maketou_order_id', req.query.orderId, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
+  }
+  res.sendFile(path.join(__dirname, 'public', 'remerciement.html'));
+});
+
+// Page /confirmation-achat (Alias rétro-compatible pointant sur la page de remerciement)
 app.get('/confirmation-achat', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'confirmation-achat.html'));
+  if (req.query.cartId) {
+    res.cookie('maketou_cart_id', req.query.cartId, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
+  }
+  if (req.query.orderId) {
+    res.cookie('maketou_order_id', req.query.orderId, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
+  }
+  res.sendFile(path.join(__dirname, 'public', 'remerciement.html'));
 });
 
 // Alias rétro-compatible
 app.get('/verify-purchase', (req, res) => {
-  res.sendFile(path.join(__dirname, 'public', 'confirmation-achat.html'));
+  res.redirect('/remerciement');
 });
 
 if (require.main === module || !process.env.VERCEL) {

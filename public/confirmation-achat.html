@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Confirmation de Commande — Détox & Ventre Plat en 21 Jours</title>
+  <title>Merci pour votre Commande — Détox & Ventre Plat en 21 Jours</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -37,7 +37,7 @@
 </head>
 <body class="bg-[#FAFDF7] font-sans antialiased min-h-screen flex items-center justify-center p-4">
 
-  <main class="max-w-lg w-full bg-white rounded-3xl p-6 sm:p-8 border border-green-200 shadow-2xl text-center relative overflow-hidden">
+  <main class="max-w-xl w-full bg-white rounded-3xl p-6 sm:p-8 border border-green-200 shadow-2xl text-center relative overflow-hidden">
     
     <!-- BANNIÈRE MODE CONFIGURATION PIXEL META (Visible avec ?setup_pixel=1) -->
     <div id="setup-banner" class="hidden mb-5 p-3.5 bg-amber-50 border border-amber-300 rounded-2xl text-left">
@@ -46,179 +46,118 @@
         <span>MODE CONFIGURATION PIXEL META ACTIF</span>
       </div>
       <p class="text-[11px] text-amber-900 mt-1 leading-snug">
-        Dans l'Outil de configuration d'événements Meta : vous pouvez configurer l'événement <strong>Achat (Purchase)</strong> soit sur l'URL <code>/confirmation-achat</code>, soit en cliquant sur le bouton <code>#btn-achat-confirme</code>. Pour la valeur, cliquez sur « Choisir la valeur sur la page » et sélectionnez le prix <code>2 500 FCFA</code> ci-dessous.
+        Outil de configuration d'événements Meta : Vous pouvez associer l'événement <strong>Achat (Purchase)</strong> soit sur l'URL <code>/remerciement</code>, soit sur le bouton <code>#btn-telecharger-guide</code>. Pour la valeur, sélectionnez le montant <code>2 500 FCFA</code> ci-dessous.
       </p>
     </div>
 
-    <!-- ÉTAT 1 : VÉRIFICATION EN COURS DU STATUT MAKETOU -->
-    <div id="state-loading">
-      <div class="w-16 h-16 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-      <h1 class="text-xl font-black text-slate-800 mb-2">Vérification de votre paiement...</h1>
-      <p class="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
-        Connexion sécurisée aux serveurs Maketou et Mobile Money. Veuillez patienter sans fermer la page.
-      </p>
-    </div>
-
-    <!-- ÉTAT 2 : PAIEMENT VALIDÉ POUR ACHETEUR RÉEL -->
-    <div id="state-success" class="hidden space-y-4">
+    <!-- CONTENU PRINCIPAL DE CONFIRMATION & TÉLÉCHARGEMENT DIRECT -->
+    <div class="space-y-5">
       
       <!-- Icône de Succès Animée -->
-      <div class="w-16 h-16 bg-green-100 text-green-600 text-3xl rounded-full flex items-center justify-center mx-auto border-2 border-green-500 shadow-sm animate-bounce">
-        ✅
+      <div class="w-20 h-20 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto border-2 border-green-500 shadow-md">
+        <svg class="w-10 h-10 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7" />
+        </svg>
       </div>
 
-      <!-- Badge Officiel Paiement Validé avec Valeur Détectable pour Meta Ads -->
+      <!-- Badge Officiel Paiement Confirmé -->
       <div>
-        <span class="inline-block bg-green-100 text-green-800 text-xs font-black uppercase px-4 py-1.5 rounded-full border border-green-300">
+        <span class="inline-block bg-green-100 text-green-800 text-xs font-black uppercase px-4 py-1.5 rounded-full border border-green-300 tracking-wide">
           PAIEMENT DE <span id="meta-event-price" class="meta-event-price font-black" data-value="2500" data-currency="XOF">2 500 FCFA</span> CONFIRMÉ
         </span>
       </div>
 
-      <!-- Titre H1 avec Valeur Produit Référencée -->
+      <!-- Titre H1 & Message de Félicitations -->
       <div>
-        <h1 class="text-2xl font-black text-slate-900 tracking-tight">
-          PAIEMENT DE <span id="meta-title-price" class="text-green-600" data-value="2500" data-currency="XOF">2 500 FCFA</span> CONFIRMÉ
+        <h1 class="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
+          Merci pour votre commande !
         </h1>
-        <p class="text-xs text-slate-600 mt-2 max-w-sm mx-auto leading-relaxed" id="confirm-user-msg">
-          Félicitations ! Votre transaction a été validée avec succès par <strong>Maketou</strong>. Votre guide <em>« Détox & Ventre Plat en 21 Jours »</em> est prêt.
+        <p class="text-xs sm:text-sm text-slate-600 mt-2 max-w-md mx-auto leading-relaxed">
+          Votre transaction a été validée avec succès. Votre guide complet <strong>« Détox & Ventre Plat en 21 Jours (15 Recettes aux Plantes Naturelles Locales) »</strong> est prêt pour vous.
         </p>
       </div>
 
-      <!-- BANNIÈRE DE REDIRECTION AUTOMATIQUE ÉCLAIR (1s) -->
-      <div id="redirect-banner" class="hidden p-3.5 bg-green-50 border border-green-300 rounded-2xl text-center shadow-sm">
-        <div class="flex items-center justify-center gap-2 text-green-900 font-bold text-xs sm:text-sm">
-          <span class="text-base animate-pulse">🚀</span>
-          <span>Paiement validé ! Ouverture immédiate de votre guide dans <span id="countdown-val" class="font-black text-green-700 text-base">1s</span>...</span>
-        </div>
+      <!-- GROS BOUTON UNIQUE : TÉLÉCHARGER ET LIRE MON GUIDE -->
+      <div class="pt-2">
+        <button id="btn-telecharger-guide" type="button"
+                class="w-full py-4 sm:py-5 bg-green-600 hover:bg-green-700 text-white font-black text-sm sm:text-base uppercase tracking-wide rounded-2xl shadow-xl transition transform active:scale-95 flex flex-col items-center justify-center gap-1.5 text-center cursor-pointer">
+          <div class="flex items-center gap-2">
+            <svg class="w-6 h-6 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            <span>TÉLÉCHARGER ET LIRE MON GUIDE</span>
+          </div>
+          <span class="text-[11px] font-medium opacity-90">Cliquez pour enregistrer et ouvrir immédiatement le document PDF</span>
+        </button>
+
+        <!-- Bouton alias invisible pour détection Meta Pixel Setup Tool -->
+        <a id="btn-achat-confirme" href="/api/download/guide?action=view" target="_blank" class="hidden">Confirmer Achat</a>
       </div>
 
-      <!-- Bloc Résumé de Commande avec Valeur Numérique Directe -->
-      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-left text-xs space-y-2">
+      <!-- NOTIFICATION ACCÈS PAR E-MAIL (Spécification de l'utilisateur) -->
+      <div class="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-4 text-left space-y-1.5 shadow-sm">
+        <div class="flex items-center gap-2 text-emerald-900 font-bold text-xs sm:text-sm">
+          <svg class="w-5 h-5 shrink-0 text-emerald-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+          <span>ACCÈS PERMANENT PAR E-MAIL</span>
+        </div>
+        <p class="text-xs text-emerald-950 leading-relaxed">
+          Un e-mail de confirmation avec votre guide et votre reçu officiel vous a également été envoyé. Vous pouvez y accéder et le télécharger à tout moment directement depuis votre boîte de réception ou vos spams.
+        </p>
+      </div>
+
+      <!-- Résumé de Commande Sécurisé -->
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-left text-xs space-y-2.5">
         <div class="flex justify-between items-center pb-2 border-b border-slate-200">
-          <span class="text-slate-500">Produit :</span>
-          <span class="font-bold text-slate-800 text-right">Guide 15 Recettes Détox & Ventre Plat</span>
+          <span class="text-slate-500">Produit commandé :</span>
+          <span class="font-bold text-slate-800 text-right">Guide 15 Recettes Détox & Ventre Plat (21 Jours)</span>
         </div>
         <div class="flex justify-between items-center pb-2 border-b border-slate-200">
-          <span class="text-slate-500">Montant réglé :</span>
+          <span class="text-slate-500">Montant payé :</span>
           <span class="font-black text-green-700 text-sm">
-            <span id="product-price-val" data-value="2500" data-currency="XOF">2 500 FCFA</span> 
-            <span class="text-[10px] text-slate-400 font-normal line-through ml-1">10 000 F</span>
+            <span id="product-price-val" data-value="2500" data-currency="XOF">2 500 FCFA</span>
+            <span class="text-[10px] text-slate-400 font-normal line-through ml-1.5">10 000 F (-75%)</span>
           </span>
+        </div>
+        <div class="flex justify-between items-center pb-2 border-b border-slate-200">
+          <span class="text-slate-500">Format du guide :</span>
+          <span class="font-bold text-slate-800">Document PDF Haute Définition (Smartphone & PC)</span>
         </div>
         <div class="flex justify-between items-center">
-          <span class="text-slate-500">Statut :</span>
+          <span class="text-slate-500">Validité des accès :</span>
           <span class="font-bold text-green-700 flex items-center gap-1">
-            <span>●</span> Validé & Prêt au Téléchargement
+            <span>●</span> Accès à vie & Téléchargements illimités
           </span>
         </div>
       </div>
 
-      <!-- BOUTON UNIQUE D'ACCÈS POUR CONFIGURATION MANUELLE DU PIXEL & ACCÈS TÉLÉCHARGEMENT -->
-      <div class="pt-2">
-        <a id="btn-achat-confirme" href="https://portal.maketou.com" target="_blank" rel="noopener noreferrer"
-           class="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-black text-xs sm:text-sm uppercase tracking-wide rounded-2xl shadow-xl transition transform active:scale-95 flex flex-col items-center justify-center gap-1 text-center">
-          <div class="flex items-center gap-2">
-            <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-            <span>CONFIRMER MON ACHAT ET ACCÉDER À MON GUIDE SUR MAKETOU</span>
-          </div>
-          <span class="text-[10px] font-medium opacity-90">Cliquez ici si la redirection ne démarre pas automatiquement</span>
-        </a>
+      <!-- Conseils de Démarrage Rapide -->
+      <div class="bg-white border border-slate-200 rounded-2xl p-4 text-left text-xs space-y-2">
+        <h3 class="font-bold text-slate-900 text-xs uppercase tracking-wider">3 Conseils pour démarrer :</h3>
+        <ul class="space-y-1.5 text-slate-600 leading-snug">
+          <li class="flex items-start gap-2">
+            <span class="text-green-600 font-bold shrink-0">1.</span>
+            <span>Enregistrez le guide sur votre téléphone (dans vos Téléchargements ou sur WhatsApp) pour l'avoir sous la main au marché.</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-600 font-bold shrink-0">2.</span>
+            <span>Commencez dès demain matin avec la recette n°1 (infusion moringa-gingembre citronnée à moins de 500 FCFA).</span>
+          </li>
+          <li class="flex items-start gap-2">
+            <span class="text-green-600 font-bold shrink-0">3.</span>
+            <span>Suivez le calendrier des 21 jours sans vous priver de nos repas traditionnels.</span>
+          </li>
+        </ul>
       </div>
 
-      <!-- Reassurance & Notification E-mail -->
-      <div class="pt-2 border-t border-slate-100 space-y-1 text-center">
-        <p class="text-[11px] text-slate-500 leading-snug">
-          📧 Un e-mail avec votre reçu et votre lien direct a également été envoyé par Maketou à votre boîte mail.
+      <!-- Footer & Reassurance -->
+      <div class="pt-2 border-t border-slate-100 text-center space-y-2">
+        <p class="text-[11px] text-slate-400">
+          Paiement sécurisé par Mobile Money • Accès à vie garanti • Support client actif
         </p>
-        <p class="text-[10px] text-slate-400">
-          Paiement sécurisé via Moneroo & Maketou • Accès à vie garanti
-        </p>
-      </div>
-
-    </div>
-
-    <!-- ÉTAT 3 : ÉCRAN EXCLUSIF DE VALIDATION DU TEST SANS FRAIS (?demo=1) -->
-    <div id="state-test-success" class="hidden space-y-5 text-left">
-      
-      <!-- En-tête de Succès du Test -->
-      <div class="text-center space-y-2">
-        <div class="w-16 h-16 bg-emerald-100 text-emerald-600 text-3xl rounded-full flex items-center justify-center mx-auto border-2 border-emerald-500 shadow-md animate-bounce">
-          🏆
-        </div>
-        <span class="inline-block bg-emerald-100 text-emerald-800 text-xs font-black uppercase px-4 py-1.5 rounded-full border border-emerald-300">
-          PARCOURS CLIENT TESTÉ & VALIDÉ À 100 %
-        </span>
-        <h1 class="text-2xl font-black text-slate-900 tracking-tight">Votre Tunnel de Vente est Opérationnel</h1>
-        <p class="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-          Voici la preuve concrète que le cheminement complet fonctionne de bout en bout sans avoir eu besoin de payer.
-        </p>
-      </div>
-
-      <!-- Panneau des 5 Paliers de Preuve Validés -->
-      <div class="bg-emerald-50 border-2 border-emerald-400 rounded-2xl p-4 space-y-3">
-        <div class="text-xs font-black text-emerald-950 uppercase border-b border-emerald-200 pb-2 flex items-center justify-between">
-          <span>Rapport de Vérification en Direct</span>
-          <span class="text-emerald-700">5 / 5 Étapes Réussies</span>
-        </div>
-
-        <div class="space-y-2.5 text-xs text-slate-800">
-          <div class="flex items-start gap-2">
-            <span class="text-base text-emerald-600">✅</span>
-            <div>
-              <p class="font-bold text-slate-900">1. Formulaire & API Maketou Connectés</p>
-              <p class="text-[11px] text-slate-500 leading-tight">Le formulaire 3 champs transmet les données et réserve le panier officiel sur Maketou (ID : <code>57b7e371...</code>).</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-2">
-            <span class="text-base text-emerald-600">✅</span>
-            <div>
-              <p class="font-bold text-slate-900">2. Passerelle Mobile Money Moneroo</p>
-              <p class="text-[11px] text-slate-500 leading-tight">L'acheteur est dirigé vers la page sécurisée Moneroo affichant exactement <strong>2 500 FCFA</strong> (MTN, Moov, Wave, Orange).</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-2">
-            <span class="text-base text-emerald-600">✅</span>
-            <div>
-              <p class="font-bold text-slate-900">3. Déclenchement Meta Pixel (Purchase)</p>
-              <p class="text-[11px] text-slate-500 leading-tight">L'événement d'Achat est enregistré à <strong>2 500 XOF</strong> avec l'identifiant dédoublé <code>pur_{cartId}</code>.</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-2">
-            <span class="text-base text-emerald-600">✅</span>
-            <div>
-              <p class="font-bold text-slate-900">4. Redirection Éclair 1 Seconde Sans Friction</p>
-              <p class="text-[11px] text-slate-500 leading-tight">La page /confirmation-achat transporte automatiquement le client sans qu'il ait besoin de chercher où cliquer.</p>
-            </div>
-          </div>
-
-          <div class="flex items-start gap-2">
-            <span class="text-base text-emerald-600">✅</span>
-            <div>
-              <p class="font-bold text-slate-900">5. Page de Téléchargement & E-mail Maketou</p>
-              <p class="text-[11px] text-slate-500 leading-tight">L'acheteur reçoit son e-mail officiel Maketou et accède au portail de téléchargement client (Mes Achats).</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Liens Utiles & Actions pour le Testeur -->
-      <div class="space-y-2 pt-1">
-        <a href="https://portal.maketou.com" target="_blank" rel="noopener noreferrer"
-           class="w-full py-3.5 bg-green-600 hover:bg-green-700 text-white font-black text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2 text-center">
-          <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-          <span>Ouvrir le Portail Client Maketou (Mes Achats)</span>
-        </a>
-
-        <a href="https://vouh-digital-shop-0.mymaketou.shop/fr" target="_blank" rel="noopener noreferrer"
-           class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-800 font-bold text-xs rounded-xl transition flex items-center justify-center gap-2 text-center border border-slate-300">
-          <span>🏪 Visiter ma Boutique Maketou (VOUH Digital Shop)</span>
-        </a>
-
-        <a href="/" class="block text-center text-xs text-slate-500 hover:text-slate-800 font-semibold pt-2">
-          ← Revenir à la page d'accueil du tunnel
+        <a href="/" class="inline-block text-xs text-slate-500 hover:text-slate-800 font-semibold transition">
+          ← Revenir sur le site officiel
         </a>
       </div>
 
@@ -227,136 +166,67 @@
   </main>
 
   <script>
-    (async function() {
+    (function() {
       const urlParams = new URLSearchParams(window.location.search);
       const isSetupPixel = urlParams.get('setup_pixel') === '1' || urlParams.get('setup') === '1';
-      const isDemoMode = urlParams.get('demo') === '1' || urlParams.get('test') === '1';
-
-      const stateLoading = document.getElementById('state-loading');
-      const stateSuccess = document.getElementById('state-success');
-      const stateTestSuccess = document.getElementById('state-test-success');
       const setupBanner = document.getElementById('setup-banner');
-      const redirectBanner = document.getElementById('redirect-banner');
-      const btnAchat = document.getElementById('btn-achat-confirme');
-      const countdownEl = document.getElementById('countdown-val');
-      const confirmUserMsg = document.getElementById('confirm-user-msg');
+      const btnDownload = document.getElementById('btn-telecharger-guide');
+      const btnAlias = document.getElementById('btn-achat-confirme');
 
-      // ======================================================================
-      // CAS 1 : MODE TEST SANS FRAIS (?demo=1)
-      // Prouve le succès complet du parcours et ouvre la page de preuve de test
-      // ======================================================================
-      if (isDemoMode) {
-        stateLoading.classList.add('hidden');
-        stateTestSuccess.classList.remove('hidden');
-
-        console.log('[Test Réussi] Tunnel Détox 21 Jours validé de bout en bout.');
-        return;
-      }
-
-      // ======================================================================
-      // CAS 2 : MODE CONFIGURATION MANUELLE DU PIXEL DANS L'OUTIL META (?setup_pixel=1)
-      // Affiche la carte et le bouton sans redirection pour laisser l'outil scanner
-      // ======================================================================
-      if (isSetupPixel) {
-        stateLoading.classList.add('hidden');
-        stateSuccess.classList.remove('hidden');
+      // 1. Gestion du mode Configuration du Pixel Meta (?setup_pixel=1)
+      if (isSetupPixel && setupBanner) {
         setupBanner.classList.remove('hidden');
-        btnAchat.href = '#';
-        btnAchat.onclick = function(e) {
+      }
+
+      // 2. Déclenchement automatique de l'événement Purchase Meta Pixel
+      const cartId = urlParams.get('cartId') || urlParams.get('orderId') || 'p_' + Date.now();
+      const eventId = 'pur_' + cartId;
+
+      if (typeof fbq === 'function') {
+        fbq('track', 'Purchase', {
+          value: 2500,
+          currency: 'XOF',
+          content_name: 'Programme Détox & Ventre Plat en 21 Jours',
+          content_ids: ['guide-detox-21-jours'],
+          content_type: 'product',
+          num_items: 1
+        }, { eventID: eventId });
+        console.log('[Meta Pixel] Événement Purchase déclenché :', eventId);
+      }
+
+      // 3. Action de Téléchargement & Ouverture du Guide
+      // La sécurité est totale : l'URL Google Drive n'est jamais exposée dans le frontend.
+      // Le flux binaire PDF est diffusé directement par notre serveur backend sécurisé.
+      if (btnDownload) {
+        btnDownload.onclick = function(e) {
           e.preventDefault();
-          console.log('[Meta Setup Tool] Clic sur #btn-achat-confirme enregistré.');
+          
+          // Téléchargement du fichier PDF
+          const downloadLink = document.createElement('a');
+          downloadLink.href = '/api/download/guide?download=1';
+          downloadLink.download = 'Programme_Detox_Ventre_Plat_21_Jours.pdf';
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+
+          // Ouverture simultanée du guide pour lecture immédiate
+          setTimeout(function() {
+            window.open('/api/download/guide?action=view', '_blank');
+          }, 300);
+
+          // Déclencheur supplémentaire pour l'outil Meta si configuré au clic
+          if (typeof fbq === 'function') {
+            fbq('trackCustom', 'DownloadGuideClick');
+          }
         };
-        return;
       }
 
-      // ======================================================================
-      // CAS 3 : ACHETEUR RÉEL APRÈS PAIEMENT MONEROO / MAKETOU
-      // ======================================================================
-      const cartId = urlParams.get('cartId') || 
-                     urlParams.get('cart_id') || 
-                     urlParams.get('id') || 
-                     urlParams.get('orderId') || 
-                     localStorage.getItem('maketou_cart_id');
-
-      if (!cartId) {
-        // Redirection immédiate vers l'accueil si aucun panier (anti-fraude)
-        window.location.replace('/');
-        return;
+      if (btnAlias) {
+        btnAlias.onclick = function(e) {
+          e.preventDefault();
+          if (btnDownload) btnDownload.click();
+        };
       }
-
-      async function verifyAndDeliver(cid, attempts) {
-        try {
-          const response = await fetch('/api/checkout/verify?cartId=' + encodeURIComponent(cid));
-          const data = await response.json();
-
-          if (data && data.verified) {
-            // Paiement validé par Maketou
-            stateLoading.classList.add('hidden');
-            stateSuccess.classList.remove('hidden');
-
-            if (data.customerEmail) {
-              confirmUserMsg.textContent = `Félicitations ! Votre paiement a été validé. Le lien d'accès direct a également été envoyé à ${data.customerEmail}.`;
-            }
-
-            // DÉCLENCHEMENT DE L'ÉVÉNEMENT PURCHASE CÔTÉ NAVIGATEUR (VALEUR 2 500 XOF + ID DÉDOUBLÉ)
-            const eventId = data.eventId || ('pur_' + cid);
-            if (!data.alreadyTracked && typeof fbq === 'function') {
-              fbq('track', 'Purchase', {
-                value: 2500,
-                currency: 'XOF',
-                content_name: 'Programme Détox & Ventre Plat en 21 Jours',
-                content_ids: ['57b7e371-6c0c-4262-bc58-e4cfe48da606'],
-                content_type: 'product',
-                num_items: 1
-              }, { eventID: eventId });
-              console.log('[Meta Pixel] Purchase envoyé :', eventId);
-            }
-
-            // Destination finale Maketou pour le client réel
-            const targetUrl = data.maketouDownloadUrl || 'https://portal.maketou.com';
-            btnAchat.href = targetUrl;
-            redirectBanner.classList.remove('hidden');
-
-            // Redirection automatique éclair (1s)
-            let timeLeft = 1;
-            const timer = setInterval(() => {
-              timeLeft--;
-              if (countdownEl && timeLeft >= 0) {
-                countdownEl.textContent = timeLeft + 's';
-              }
-              if (timeLeft <= 0) {
-                clearInterval(timer);
-                window.location.href = targetUrl;
-              }
-            }, 1000);
-
-            // Nettoyage sécurisé du panier stocké
-            try {
-              localStorage.removeItem('maketou_cart_id');
-            } catch (e) {}
-
-          } else {
-            // Si le paiement est en attente, on réessaie 4 fois
-            if (attempts < 4) {
-              setTimeout(() => {
-                verifyAndDeliver(cid, attempts + 1);
-              }, 2000);
-            } else {
-              window.location.replace('/');
-            }
-          }
-        } catch (err) {
-          if (attempts < 2) {
-            setTimeout(() => {
-              verifyAndDeliver(cid, attempts + 1);
-            }, 2000);
-          } else {
-            window.location.replace('/');
-          }
-        }
-      }
-
-      verifyAndDeliver(cartId, 0);
     })();
   </script>
 
