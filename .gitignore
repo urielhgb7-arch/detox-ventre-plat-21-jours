@@ -1,0 +1,27 @@
+# Dépendances
+node_modules/
+package-lock.json
+
+# Fichiers d'environnement sensibles (NE JAMAIS COMMITER)
+.env
+.env.local
+.env.*.local
+
+# Base de données locale de commandes
+orders_db.json
+
+# Captures d'écran et logs
+screenshots/
+*.log
+npm-debug.log*
+
+# Fichiers système et éditeurs
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Fichiers temporaires ou vidéos brutes à la racine
+/*.mp4
+/*.zip
+temp_*

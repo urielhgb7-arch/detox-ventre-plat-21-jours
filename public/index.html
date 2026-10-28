@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Détox & Ventre Plat en 21 Jours | 15 Recettes Locales</title>
+  <meta name="description" content="Dégonflez votre ventre en 21 jours sans produits chimiques. 15 recettes aux plantes locales à moins de 500 FCFA par jour.">
+  
+  <!-- Tailwind CSS CDN & Typographie -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&family=Playfair+Display:wght@700;900&display=swap" rel="stylesheet">
+  
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ivoire: '#FAFDF7',
+            foret: '#14532D',
+            emeraude: '#16A34A',
+            bissap: '#E11D48',
+            citron: '#EAB308'
+          },
+          fontFamily: {
+            sans: ['Plus Jakarta Sans', 'sans-serif'],
+            serif: ['Playfair Display', 'serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Meta Pixel Code Andromeda -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1697536258749199');
+    fbq('track', 'PageView');
+    fbq('track', 'ViewContent', {
+      content_name: 'Programme Détox & Ventre Plat en 21 Jours',
+      content_ids: ['57b7e371-6c0c-4262-bc58-e4cfe48da606'],
+      content_type: 'product',
+      value: 2500,
+      currency: 'XOF'
+    });
+  </script>
+
+  <style>
+    .glass-effect {
+      background: rgba(255, 255, 255, 0.94);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(20, 83, 45, 0.15);
+    }
+    .pulse-glow {
+      animation: pulseGlow 2s infinite;
+    }
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0.7); }
+      70% { box-shadow: 0 0 0 12px rgba(22, 163, 74, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(22, 163, 74, 0); }
+    }
+    .no-scrollbar::-webkit-scrollbar {
+      display: none;
+    }
+    .no-scrollbar {
+      -ms-overflow-style: none;
+      scrollbar-width: none;
+    }
+  </style>
+</head>
+<body class="bg-ivoire text-slate-800 font-sans antialiased pb-16">
+
+  <!-- BANDEAU FLASH SUPÉRIEUR (1 LIGNE COMPACTE - ZÉRO EMOJI) -->
+  <div class="bg-bissap text-white text-[11px] sm:text-xs font-bold text-center py-1.5 px-3 sticky top-0 z-40 shadow flex items-center justify-center gap-1.5">
+    <svg class="w-3.5 h-3.5 text-citron shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+    </svg>
+    <span>OFFRE FLASH : <strong>2 500 FCFA</strong> au lieu de <span class="line-through opacity-75">10 000 FCFA</span> (-75 %) — Téléchargement immédiat</span>
+  </div>
+
+  <main class="max-w-xl mx-auto px-3 pt-2.5 space-y-3">
+
+    <!-- ========================================================================= -->
+    <!-- BLOC 1 (ÉCRAN 1) : HERO COMPACT CÔTE À CÔTE + 1ER BOUTON CTA -->
+    <!-- ========================================================================= -->
+    <header class="bg-white rounded-2xl p-3.5 border border-green-200/80 shadow-sm text-left">
+      <!-- Titre H1 Court (2 lignes) -->
+      <h1 class="text-lg sm:text-2xl font-black text-foret font-serif leading-snug mb-1.5">
+        Dégonflez votre ventre en 21 jours avec 15 recettes naturelles aux plantes de nos marchés locaux
+      </h1>
+      
+      <!-- Sous-titre H2 (1 phrase courte) -->
+      <p class="text-xs text-slate-600 leading-relaxed mb-2.5">
+        Retrouvez une taille fine et une digestion légère avec des ingrédients à moins de 500 FCFA (moringa, gingembre, bissap sans sucre, citron) sans renoncer à nos plats africains.
+      </p>
+
+      <!-- Disposition Horizontale Compacte : Photo 3D à gauche + 3 puces à droite -->
+      <div class="grid grid-cols-12 gap-2.5 items-center bg-green-50/60 p-2 rounded-xl border border-green-200 mb-2.5">
+        <!-- Photo 3D du Livre (Max-H 120px) -->
+        <div class="col-span-4 text-center">
+          <img src="/images/hero-book-detox.jpg" alt="Livre Détox 21 Jours" class="h-24 sm:h-28 w-auto mx-auto object-cover rounded-lg shadow-sm border-2 border-citron">
+        </div>
+
+        <!-- 3 Puces Courtes (Lucide CheckCircle2) -->
+        <div class="col-span-8 space-y-1 text-[11px] font-semibold text-slate-700">
+          <div class="flex items-start gap-1.5">
+            <svg class="w-3.5 h-3.5 text-emeraude shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span><strong>100 % naturel :</strong> Zéro thé chimique du marché.</span>
+          </div>
+          <div class="flex items-start gap-1.5">
+            <svg class="w-3.5 h-3.5 text-emeraude shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span><strong>Sans frustration :</strong> Plats locaux bien dosés.</span>
+          </div>
+          <div class="flex items-start gap-1.5">
+            <svg class="w-3.5 h-3.5 text-emeraude shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <span><strong>Prêt en 5 min :</strong> 15 recettes + Calendrier J1-J21.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bouton CTA #1 (Visible dès le premier écran) -->
+      <button onclick="scrollToForm()" class="w-full py-2.5 bg-emeraude hover:bg-green-700 text-white font-black text-xs sm:text-sm rounded-xl shadow-lg transition transform active:scale-95 pulse-glow flex items-center justify-center gap-2">
+        <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+        <span>TÉLÉCHARGER LE GUIDE — 2500 FCFA (-75 %)</span>
+      </button>
+    </header>
+
+    <!-- ========================================================================= -->
+    <!-- BLOC 2 (ÉCRAN 2) : GRILLE 2 COLONNES [VIDÉO LOCALE + AVANT/APRÈS] + AVIS + ACCORDÉON -->
+    <!-- ========================================================================= -->
+    <section class="bg-white rounded-2xl p-3.5 border border-slate-200 shadow-sm space-y-2.5">
+      
+      <!-- Grille 2 Colonnes Ultra-Compacte (Hauteur 190px) -->
+      <div class="grid grid-cols-2 gap-2">
+        <!-- Colonne 1 : Lecteur Vidéo Vertical Local 9:16 -->
+        <div class="relative bg-slate-900 rounded-xl overflow-hidden border-2 border-foret shadow h-[190px] flex flex-col justify-end p-2 text-white">
+          <video id="local-video-player" src="/videos/temoignage-detox-20s.mp4" poster="/images/testimonial-woman-detox.jpg" 
+                 playsinline autoplay muted loop class="absolute inset-0 w-full h-full object-cover">
+          </video>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-black/30 pointer-events-none"></div>
+
+          <div class="relative z-10 flex justify-between items-center mb-1">
+            <span class="text-[9px] bg-bissap px-1.5 py-0.5 rounded font-black">Preuve Vidéo</span>
+            <button onclick="toggleVideoMute()" id="sound-btn" class="bg-black/60 p-1 rounded-full text-white text-[10px] hover:bg-black">
+              <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>
+            </button>
+          </div>
+          <div class="relative z-10 text-[10px] leading-tight font-bold text-citron">
+            Amina K. (Livre en main)
+            <span class="block text-[9px] font-normal text-slate-300">-5 cm de tour de taille</span>
+          </div>
+        </div>
+
+        <!-- Colonne 2 : Photo Avant / Après -->
+        <div class="relative rounded-xl overflow-hidden border-2 border-slate-200 shadow h-[190px]">
+          <img src="/images/before-after-detox.jpg" alt="Avant Après Détox 21 Jours" class="w-full h-full object-cover">
+          <div class="absolute bottom-0 inset-x-0 bg-black/60 backdrop-blur-xs p-1 text-center text-white text-[9px] font-bold">
+            Avant (J1) vs Après (21j)
+          </div>
+        </div>
+      </div>
+
+      <!-- Carrousel Horizontal Compact des 6 Avis (1 SEULE LIGNE DE 120PX - EMOJIS AUTORISÉS ICI UNIQUEMENT) -->
+      <div>
+        <div class="flex items-center justify-between text-[11px] font-bold text-slate-600 mb-1 px-0.5">
+          <span>Avis vérifiés (Note 4.9/5)</span>
+          <span class="text-[10px] text-emeraude font-semibold">Glissez horizontalement ➔</span>
+        </div>
+
+        <div class="flex gap-2.5 overflow-x-auto no-scrollbar snap-x py-1">
+          <!-- Avis 1 : Fatou S. -->
+          <div class="snap-start shrink-0 w-[240px] bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-[11px] flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-bold text-slate-800">Fatou S. (Dakar)</span>
+                <span class="text-[10px] font-bold text-emeraude">Wave ✅</span>
+              </div>
+              <div class="text-[10px] text-citron mb-1">⭐⭐⭐⭐⭐</div>
+              <p class="text-slate-600 text-[10px] leading-snug">« Dès le 6e jour avec l'infusion moringa-gingembre, mon ventre a complètement dégonflé ! »</p>
+            </div>
+          </div>
+
+          <!-- Avis 2 : Nadège K. -->
+          <div class="snap-start shrink-0 w-[240px] bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-[11px] flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-bold text-slate-800">Nadège K. (Abidjan)</span>
+                <span class="text-[10px] font-bold text-emeraude">Orange Money ✅</span>
+              </div>
+              <div class="text-[10px] text-citron mb-1">⭐⭐⭐⭐⭐</div>
+              <p class="text-slate-600 text-[10px] leading-snug">« J'ai perdu 5 cm de tour de taille en 3 semaines tout en continuant à manger mon attiéké. »</p>
+            </div>
+          </div>
+
+          <!-- Avis 3 : Estelle H. -->
+          <div class="snap-start shrink-0 w-[240px] bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-[11px] flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-bold text-slate-800">Estelle H. (Cotonou)</span>
+                <span class="text-[10px] font-bold text-emeraude">MTN MoMo ✅</span>
+              </div>
+              <div class="text-[10px] text-citron mb-1">⭐⭐⭐⭐⭐</div>
+              <p class="text-slate-600 text-[10px] leading-snug">« Les variantes douces du chapitre 3 sont parfaites pour mon estomac sensible. »</p>
+            </div>
+          </div>
+
+          <!-- Avis 4 : Mireille E. -->
+          <div class="snap-start shrink-0 w-[240px] bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-[11px] flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-bold text-slate-800">Mireille E. (Douala)</span>
+                <span class="text-[10px] font-bold text-emeraude">Orange Money ✅</span>
+              </div>
+              <div class="text-[10px] text-citron mb-1">⭐⭐⭐⭐⭐</div>
+              <p class="text-slate-600 text-[10px] leading-snug">« Le calendrier Jour 1 à Jour 21 est super simple à suivre et économique. »</p>
+            </div>
+          </div>
+
+          <!-- Avis 5 : Aïcha T. -->
+          <div class="snap-start shrink-0 w-[240px] bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-[11px] flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-bold text-slate-800">Aïcha T. (Ouaga)</span>
+                <span class="text-[10px] font-bold text-emeraude">Moov ✅</span>
+              </div>
+              <div class="text-[10px] text-citron mb-1">⭐⭐⭐⭐⭐</div>
+              <p class="text-slate-600 text-[10px] leading-snug">« Les 10 minutes de respiration le matin affinent vraiment la taille sans effort. »</p>
+            </div>
+          </div>
+
+          <!-- Avis 6 : Chantal G. -->
+          <div class="snap-start shrink-0 w-[240px] bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-[11px] flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-center mb-1">
+                <span class="font-bold text-slate-800">Chantal G. (Lomé)</span>
+                <span class="text-[10px] font-bold text-emeraude">Moov ✅</span>
+              </div>
+              <div class="text-[10px] text-citron mb-1">⭐⭐⭐⭐⭐</div>
+              <p class="text-slate-600 text-[10px] leading-snug">« Reçu en 5 secondes sur mon téléphone après paiement de 2 500 FCFA. Très clair ! »</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Accordéon Replié Unique : Sommaire & Aperçu des 4 Pages (44px fermé) -->
+      <div class="border border-slate-200 rounded-xl overflow-hidden">
+        <button onclick="toggleAccordion()" id="acc-btn" class="w-full py-2.5 px-3 bg-slate-50 hover:bg-slate-100 flex items-center justify-between text-xs font-bold text-slate-800 transition">
+          <span class="flex items-center gap-1.5">
+            <svg class="w-4 h-4 text-foret" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" /></svg>
+            <span>Voir le sommaire et l'aperçu intérieur du PDF</span>
+          </span>
+          <span id="acc-icon" class="text-foret font-black text-sm">+</span>
+        </button>
+
+        <div id="acc-content" class="hidden p-3 bg-white text-xs text-slate-600 space-y-2 border-t border-slate-100">
+          <div class="flex gap-2 items-center">
+            <img src="/images/preview-inside-detox.jpg" alt="Aperçu Intérieur" class="w-20 h-auto rounded shadow-sm shrink-0 border">
+            <div class="space-y-1 text-[11px] leading-tight">
+              <div><strong>Chap. 1 à 3 :</strong> Les 12 plantes du marché local (<500 FCFA) + Les 15 recettes exactes de boissons détox et variantes douces.</div>
+              <div><strong>Chap. 4 à 7 :</strong> Règle de l'assiette africaine en 3 + Calendrier des menus J1 à J21 + Routine 10 min dans sa chambre.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Bouton CTA Intermédiaire -->
+      <button onclick="scrollToForm()" class="w-full py-2.5 bg-foret hover:bg-green-800 text-white font-extrabold text-xs rounded-xl shadow transition flex items-center justify-center gap-1.5">
+        <span>OBTENIR MON ACCÈS — 2 500 FCFA</span>
+        <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+      </button>
+    </section>
+
+    <!-- ========================================================================= -->
+    <!-- BLOC 3 (BAS DE PAGE DIRECT) : VALUE STACK COMPACT + FORMULAIRE EXPRESS (2 500 FCFA) -->
+    <!-- ========================================================================= -->
+    <section id="paiement" class="bg-white rounded-2xl p-4 border-2 border-emeraude/40 shadow-xl space-y-3">
+      
+      <!-- Mini Tableau d'Empilement de Valeur ($100M Offers) -->
+      <div class="bg-green-50/70 p-3 rounded-xl border border-green-200 text-xs">
+        <div class="flex justify-between items-center text-[11px] text-slate-600 mb-1">
+          <span>Livre 15 Recettes + Calendrier 21j + Assiette en 3 + Routine 10 min :</span>
+          <span class="line-through text-slate-400 font-semibold">38 000 FCFA</span>
+        </div>
+        <div class="flex justify-between items-center text-sm font-black text-foret pt-1 border-t border-green-200">
+          <span>VOTRE PRIX AUJOURD'HUI (ACCÈS IMMÉDIAT) :</span>
+          <span class="text-emeraude text-base">2 500 FCFA (-75 %)</span>
+        </div>
+      </div>
+
+      <!-- En-tête formulaire -->
+      <div class="text-center">
+        <span class="text-[10px] font-black uppercase text-emeraude bg-green-100 px-2.5 py-0.5 rounded-full inline-flex items-center gap-1">
+          <svg class="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+          Paiement Sécurisé (3 Champs)
+        </span>
+        <h3 class="text-base font-black text-foret mt-1">Téléchargez Votre Guide Immédiatement</h3>
+      </div>
+
+      <!-- Boîte d'erreur dynamique -->
+      <div id="checkout-error" class="hidden p-2.5 bg-red-100 border border-red-300 text-red-800 text-xs rounded-xl font-medium"></div>
+
+      <!-- Formulaire 3 Champs Express -->
+      <form id="express-form" onsubmit="handleCheckout(event)" class="space-y-2.5">
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Votre Nom Complet</label>
+          <input type="text" id="cust-name" required placeholder="Ex: Ulrich Koffi" 
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emeraude bg-white">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Votre Adresse Email</label>
+          <input type="email" id="cust-email" required placeholder="Ex: client@gmail.com" 
+            class="w-full px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emeraude bg-white">
+        </div>
+
+        <div>
+          <label class="block text-[11px] font-bold text-slate-700 uppercase mb-1">Numéro WhatsApp (Mobile Money)</label>
+          <div class="flex gap-2">
+            <select id="cust-country" class="px-2.5 py-2.5 rounded-xl border border-slate-300 text-xs font-bold bg-white text-slate-800">
+              <option value="+229" selected>BJ +229 (Bénin)</option>
+              <option value="+225">CI +225 (Côte d'Ivoire)</option>
+              <option value="+221">SN +221 (Sénégal)</option>
+              <option value="+237">CM +237 (Cameroun)</option>
+              <option value="+228">TG +228 (Togo)</option>
+              <option value="+226">BF +226 (Burkina Faso)</option>
+              <option value="+223">ML +223 (Mali)</option>
+              <option value="+241">GA +241 (Gabon)</option>
+            </select>
+            <input type="tel" id="cust-phone" required placeholder="01 44 99 20 86" 
+              class="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-300 text-xs focus:ring-2 focus:ring-emeraude bg-white">
+          </div>
+        </div>
+
+        <!-- Bouton de Paiement Final -->
+        <button type="submit" id="submit-btn" 
+          class="w-full py-3.5 bg-emeraude hover:bg-green-700 text-white font-black text-xs sm:text-sm rounded-xl shadow-xl transition transform active:scale-95 pulse-glow flex items-center justify-center gap-2">
+          <svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
+          <span>PAYER 2500 FCFA PAR MOBILE MONEY ET TÉLÉCHARGER MAINTENANT</span>
+        </button>
+
+        <!-- Inversion du Risque (ShieldCheck SVG) -->
+        <div class="flex items-center justify-center gap-1.5 text-[10px] text-slate-500 font-medium pt-1">
+          <svg class="w-3.5 h-3.5 text-foret" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+          <span>Paiement sécurisé Wave, MTN, Orange, Moov • Téléchargement immédiat</span>
+        </div>
+      </form>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- BARRE FLOTTANTE FIXE EN BAS D'ÉCRAN (STICKY BOTTOM BAR - 60PX) -->
+  <!-- ========================================================================= -->
+  <aside class="fixed bottom-0 inset-x-0 h-[60px] glass-effect z-50 flex items-center justify-between px-4 max-w-xl mx-auto shadow-2xl">
+    <div>
+      <div class="text-[10px] text-slate-500 line-through leading-tight">10 000 FCFA</div>
+      <div class="text-base font-black text-foret leading-none">2 500 FCFA <span class="text-[10px] text-emeraude font-bold">(-75%)</span></div>
+    </div>
+    <button onclick="scrollToForm()" class="bg-emeraude hover:bg-green-700 text-white font-black text-xs py-2.5 px-5 rounded-xl shadow-lg transition active:scale-95 flex items-center gap-1.5">
+      <span>ACHETER MAINTENANT</span>
+      <svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+    </button>
+  </aside>
+
+  <!-- SCRIPTS : SCROLL INTELLIGENT, GESTION VIDÉO & CHECKOUT MAKETOU -->
+  <script>
+    // 1. Scroll intelligent vers le formulaire avec focus automatique
+    function scrollToForm() {
+      const form = document.getElementById('paiement');
+      form.scrollIntoView({ behavior: 'smooth' });
+      setTimeout(() => {
+        const input = document.getElementById('cust-name');
+        if (input) input.focus();
+      }, 350);
+    }
+
+    // 2. Gestion Son de la Vidéo Locale
+    function toggleVideoMute() {
+      const video = document.getElementById('local-video-player');
+      video.muted = !video.muted;
+      const btn = document.getElementById('sound-btn');
+      if (video.muted) {
+        btn.innerHTML = `<svg class="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15.536 8.464a5 5 0 010 7.072m2.828-9.9a9 9 0 010 12.728M5.586 15H4a1 1 0 01-1-1v-4a1 1 0 011-1h1.586l4.707-4.707C10.923 3.663 12 4.109 12 5v14c0 .891-1.077 1.337-1.707.707L5.586 15z" /></svg>`;
+      } else {
+        btn.innerHTML = `<svg class="w-3.5 h-3.5 text-emeraude" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 100-6 3 3 0 000 6z" /></svg>`;
+      }
+    }
+
+    // 3. Bascule Accordéon
+    function toggleAccordion() {
+      const content = document.getElementById('acc-content');
+      const icon = document.getElementById('acc-icon');
+      if (content.classList.contains('hidden')) {
+        content.classList.remove('hidden');
+        icon.innerText = '-';
+      } else {
+        content.classList.add('hidden');
+        icon.innerText = '+';
+      }
+    }
+
+    // 4. Normalisation Intelligente des Téléphones Africains
+    function formatAfricanPhone(countryCode, rawInput) {
+      let digits = String(rawInput || '').replace(/[^0-9]/g, '');
+      const prefix = countryCode.replace(/[^0-9]/g, '');
+      if (digits.startsWith(prefix)) {
+        digits = digits.slice(prefix.length);
+      }
+      if (prefix === '229') {
+        if (digits.length === 9 && digits.startsWith('1')) {
+          digits = '0' + digits;
+        }
+      } else if (prefix === '225') {
+        if (digits.length === 9) {
+          digits = '0' + digits;
+        }
+      } else {
+        digits = digits.replace(/^0+/, '');
+      }
+      return '+' + prefix + digits;
+    }
+
+    function getCookie(name) {
+      const value = `; ${document.cookie}`;
+      const parts = value.split(`; ${name}=`);
+      if (parts.length === 2) return parts.pop().split(';').shift();
+      return '';
+    }
+
+    // 5. Soumission Express Checkout Maketou
+    async function handleCheckout(event) {
+      event.preventDefault();
+      const submitBtn = document.getElementById('submit-btn');
+      const errBox = document.getElementById('checkout-error');
+      errBox.classList.add('hidden');
+
+      const name = document.getElementById('cust-name').value.trim();
+      const email = document.getElementById('cust-email').value.trim();
+      const country = document.getElementById('cust-country').value;
+      const phoneInput = document.getElementById('cust-phone').value.trim();
+      const fullPhone = formatAfricanPhone(country, phoneInput);
+
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span>Connexion sécurisée en cours...</span>`;
+
+      if (typeof fbq === 'function') {
+        fbq('track', 'InitiateCheckout', {
+          content_name: 'Programme Détox & Ventre Plat en 21 Jours',
+          content_ids: ['57b7e371-6c0c-4262-bc58-e4cfe48da606'],
+          content_type: 'product',
+          value: 2500,
+          currency: 'XOF'
+        });
+      }
+
+      try {
+        const response = await fetch('/api/checkout/create', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            fullName: name,
+            email: email,
+            phone: fullPhone,
+            fbp: getCookie('_fbp'),
+            fbc: getCookie('_fbc')
+          })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok || !data.redirectUrl) {
+          let errorText = "Une erreur est survenue lors de la création du panier.";
+          if (data.details && Array.isArray(data.details.message)) {
+            const hasPhoneErr = data.details.message.some(m => m.property === 'phone');
+            if (hasPhoneErr) {
+              errorText = "Numéro de téléphone invalide pour votre pays. Au Bénin, saisissez vos 10 chiffres (ex: 01 44 99 20 86) ou vos 8 chiffres (ex: 97 00 00 00).";
+            } else {
+              errorText = data.details.message.map(m => m.constraints ? Object.values(m.constraints).join(', ') : m.property).join(' | ');
+            }
+          } else if (data.details?.message && typeof data.details.message === 'string') {
+            errorText = data.details.message;
+          } else if (data.error) {
+            errorText = data.error;
+          }
+          throw new Error(errorText);
+        }
+
+        window.location.href = data.redirectUrl;
+      } catch (err) {
+        errBox.innerText = err.message || "Une erreur est survenue. Veuillez vérifier votre saisie.";
+        errBox.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = `<svg class="w-4 h-4 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg><span>PAYER 2500 FCFA PAR MOBILE MONEY ET TÉLÉCHARGER MAINTENANT</span>`;
+      }
+    }
+  </script>
+</body>
+</html>
