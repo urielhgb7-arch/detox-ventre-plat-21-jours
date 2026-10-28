@@ -20,13 +20,18 @@ const DB_FILE = process.env.VERCEL
   : path.join(__dirname, 'orders_db.json');
 let ordersDB = {};
 
-if (fs.existsSync(DB_FILE)) {
-  try {
-    ordersDB = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
-  } catch (e) {
-    ordersDB = {};
+function readDB() {
+  if (fs.existsSync(DB_FILE)) {
+    try {
+      ordersDB = JSON.parse(fs.readFileSync(DB_FILE, 'utf8'));
+    } catch (e) {
+      ordersDB = ordersDB || {};
+    }
   }
+  return ordersDB;
 }
+
+readDB();
 
 function saveDB() {
   try {
@@ -317,6 +322,7 @@ app.post('/api/checkout/create', async (req, res) => {
 // ============================================================================
 app.get('/api/checkout/verify', async (req, res) => {
   try {
+    readDB();
     const { cartId, setup_pixel } = req.query;
 
     // Permet à l'Outil de configuration d'événements Meta d'afficher la page et le bouton en mode configuration :
@@ -384,7 +390,13 @@ app.get('/api/checkout/verify', async (req, res) => {
     }
 
     // Récupération de toute URL de téléchargement ou reçu renvoyée par Maketou
-    const maketouDownloadUrl = cart?.downloadUrl || cart?.fileUrl || cart?.receiptUrl || cart?.orderUrl || null;
+    const maketouDownloadUrl = cart?.downloadUrl 
+      || cart?.fileUrl 
+      || cart?.receiptUrl 
+      || cart?.orderUrl 
+      || cart?.invoiceUrl 
+      || process.env.MAKETOU_DOWNLOAD_URL 
+      || (cart?.id ? `https://maketou.net/orders/${cart.id}` : null);
 
     return res.status(200).json({
       verified: true,
@@ -432,12 +444,27 @@ app.post('/api/order/confirm-tracking', async (req, res) => {
 // ============================================================================
 app.post('/api/test/simulate-completed', (req, res) => {
   const { orderId } = req.body;
-  if (!orderId || !ordersDB[orderId]) {
-    return res.status(404).json({ error: 'Commande introuvable' });
+  readDB();
+  if (!orderId) {
+    return res.status(400).json({ error: 'orderId requis' });
   }
-  ordersDB[orderId].status = 'completed';
+  const order = ordersDB[orderId] || Object.values(ordersDB).find(o => o.cartId === orderId);
+  if (order) {
+    order.status = 'completed';
+    ordersDB[order.orderId] = order;
+    if (order.cartId) ordersDB[order.cartId] = order;
+  } else {
+    ordersDB[orderId] = {
+      orderId,
+      cartId: orderId,
+      status: 'completed',
+      email: 'client@example.com',
+      amount: 2500,
+      purchase_tracked: 0
+    };
+  }
   saveDB();
-  return res.json({ success: true, message: `Commande ${orderId} marquée completed pour test.` });
+  return res.json({ success: true, message: `Commande ${orderId} marquée completed.` });
 });
 
 // Webhook Maketou
