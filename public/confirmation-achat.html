@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Confirmation de Commande — Détox & Ventre Plat en 21 Jours</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800;900&display=swap" rel="stylesheet">
+  
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    .bg-foret { background-color: #0F281E; }
+    .text-foret { color: #0F281E; }
+    .bg-emeraude { background-color: #16A34A; }
+    .text-emeraude { color: #16A34A; }
+    .border-emeraude { border-color: #16A34A; }
+  </style>
+
+  <!-- Meta Pixel Code -->
+  <script>
+    !function(f,b,e,v,n,t,s)
+    {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+    n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+    if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+    n.queue=[];t=b.createElement(e);t.async=!0;
+    t.src=v;s=b.getElementsByTagName(e)[0];
+    s.parentNode.insertBefore(t,s)}(window, document,'script',
+    'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', '1697536258749199');
+    fbq('track', 'PageView');
+  </script>
+  <noscript>
+    <img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=1697536258749199&ev=PageView&noscript=1" />
+  </noscript>
+</head>
+<body class="bg-[#FAFDF7] font-sans antialiased min-h-screen flex items-center justify-center p-4">
+
+  <main class="max-w-lg w-full bg-white rounded-3xl p-6 sm:p-8 border border-green-200 shadow-2xl text-center relative overflow-hidden">
+    
+    <!-- BANNIÈRE MODE CONFIGURATION PIXEL META (Visible uniquement avec ?setup_pixel=1) -->
+    <div id="setup-banner" class="hidden mb-5 p-3.5 bg-amber-50 border border-amber-300 rounded-2xl text-left">
+      <div class="flex items-center gap-2 text-amber-800 font-bold text-xs">
+        <svg class="w-4 h-4 shrink-0 text-amber-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+        <span>MODE CONFIGURATION PIXEL META ACTIF</span>
+      </div>
+      <p class="text-[11px] text-amber-900 mt-1 leading-snug">
+        Vous êtes dans l'Outil de configuration d'événements Meta. Vous pouvez configurer l'événement <strong>Achat (Purchase)</strong> soit sur l'URL <code>/confirmation-achat</code>, soit en cliquant sur le bouton vert ci-dessous.
+      </p>
+    </div>
+
+    <!-- ÉTAT 1 : VÉRIFICATION EN COURS DU STATUT MAKETOU -->
+    <div id="state-loading">
+      <div class="w-16 h-16 border-4 border-green-600 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+      <h1 class="text-xl font-black text-slate-800 mb-2">Vérification de votre paiement...</h1>
+      <p class="text-xs text-slate-500 max-w-sm mx-auto leading-relaxed">
+        Connexion sécurisée aux serveurs Maketou et Mobile Money. Veuillez patienter sans fermer ni rafraîchir cette page.
+      </p>
+    </div>
+
+    <!-- ÉTAT 2 : PAIEMENT VALIDÉ & BOUTON UNIQUE #btn-achat-confirme -->
+    <div id="state-success" class="hidden space-y-4">
+      
+      <!-- Icône de Succès Animée -->
+      <div class="w-16 h-16 bg-green-100 text-green-600 text-3xl rounded-full flex items-center justify-center mx-auto border-2 border-green-500 shadow-sm animate-bounce">
+        ✅
+      </div>
+
+      <!-- Badge Officiel Paiement Validé -->
+      <div>
+        <span class="inline-block bg-green-100 text-green-800 text-xs font-black uppercase px-4 py-1.5 rounded-full border border-green-300">
+          PAIEMENT DE 2 500 FCFA CONFIRMÉ
+        </span>
+      </div>
+
+      <!-- Titres & Félicitations -->
+      <div>
+        <h1 class="text-2xl font-black text-slate-900 tracking-tight">Félicitations pour votre décision !</h1>
+        <p class="text-xs text-slate-600 mt-2 max-w-sm mx-auto leading-relaxed">
+          Votre transaction de <strong>2 500 FCFA</strong> a été validée avec succès par <strong>Maketou</strong>. Votre guide <em>« Détox & Ventre Plat en 21 Jours »</em> est prêt.
+        </p>
+      </div>
+
+      <!-- Bloc Résumé de Commande -->
+      <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-left text-xs space-y-2">
+        <div class="flex justify-between items-center pb-2 border-b border-slate-200">
+          <span class="text-slate-500">Produit :</span>
+          <span class="font-bold text-slate-800 text-right">Guide 15 Recettes Détox & Ventre Plat</span>
+        </div>
+        <div class="flex justify-between items-center pb-2 border-b border-slate-200">
+          <span class="text-slate-500">Montant réglé :</span>
+          <span class="font-black text-green-700">2 500 FCFA <span class="text-[10px] text-slate-400 font-normal line-through">10 000 F</span></span>
+        </div>
+        <div class="flex justify-between items-center">
+          <span class="text-slate-500">Livraison :</span>
+          <span class="font-bold text-slate-700">Immédiate (Téléchargement direct + E-mail)</span>
+        </div>
+      </div>
+
+      <!-- BOUTON UNIQUE D'ACCÈS AU GUIDE POUR L'OUTIL META PIXEL (ID OBLIGATOIRE #btn-achat-confirme) -->
+      <div class="pt-2">
+        <a id="btn-achat-confirme" href="#" target="_blank" rel="noopener noreferrer"
+           class="w-full py-4 bg-green-600 hover:bg-green-700 text-white font-black text-xs sm:text-sm uppercase tracking-wide rounded-2xl shadow-xl transition transform active:scale-95 flex items-center justify-center gap-2 text-center">
+          <svg class="w-5 h-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          <span>CONFIRMER MON ACHAT ET ACCÉDER À MON GUIDE SUR MAKETOU</span>
+        </a>
+      </div>
+
+      <!-- Reassurance & Notification E-mail -->
+      <div class="pt-2 border-t border-slate-100 space-y-1.5 text-center">
+        <p class="text-[11px] text-slate-500 leading-snug">
+          📧 Un e-mail de confirmation avec votre reçu et votre lien de téléchargement a également été envoyé par Maketou à votre adresse e-mail.
+        </p>
+        <p class="text-[10px] text-slate-400">
+          Paiement 100% sécurisé via Moneroo & Maketou • Accès à vie garanti
+        </p>
+      </div>
+
+    </div>
+
+  </main>
+
+  <script>
+    const urlParams = new URLSearchParams(window.location.search);
+    const setupPixel = urlParams.get('setup_pixel') === '1';
+    const cartId = urlParams.get('cartId') || urlParams.get('cart_id') || urlParams.get('id') || localStorage.getItem('maketou_cart_id');
+
+    const stateLoading = document.getElementById('state-loading');
+    const stateSuccess = document.getElementById('state-success');
+    const btnAchat = document.getElementById('btn-achat-confirme');
+    const setupBanner = document.getElementById('setup-banner');
+
+    if (setupPixel) {
+      // ======================================================================
+      // MODE A — CONFIGURATION MANUELLE DU PIXEL DANS L'OUTIL META
+      // Affiche immédiatement la carte et le bouton sans redirection
+      // ======================================================================
+      stateLoading.classList.add('hidden');
+      stateSuccess.classList.remove('hidden');
+      setupBanner.classList.remove('hidden');
+      btnAchat.href = "https://maketou.net";
+      btnAchat.onclick = function(e) {
+        // En mode configuration, le clic est intercepté par l'outil Meta
+      };
+    } else {
+      // ======================================================================
+      // MODE B — VISITEUR RÉEL APRÈS PAIEMENT
+      // Vérification stricte du statut du panier via le backend
+      // ======================================================================
+      if (!cartId) {
+        // Aucun panier trouvé : redirection immédiate vers l'accueil (anti-curieux)
+        window.location.replace('/');
+      } else {
+        verifyOrder(cartId, 0);
+      }
+    }
+
+    async function verifyOrder(cid, attempts) {
+      try {
+        const response = await fetch('/api/checkout/verify?cartId=' + encodeURIComponent(cid));
+        const data = await response.json();
+
+        if (data.verified) {
+          // Paiement validé avec succès
+          stateLoading.classList.add('hidden');
+          stateSuccess.classList.remove('hidden');
+
+          // Déclenchement de l'événement Achat (Purchase) dans le Pixel Meta
+          if (!data.alreadyTracked && typeof fbq === 'function') {
+            fbq('track', 'Purchase', {
+              value: 2500,
+              currency: 'XOF',
+              content_name: 'Programme Détox & Ventre Plat en 21 Jours',
+              content_ids: ['57b7e371-6c0c-4262-bc58-e4cfe48da606'],
+              content_type: 'product'
+            }, { eventID: data.eventId || ('pur_' + cid) });
+          }
+
+          // Attribution du lien de téléchargement Maketou
+          if (data.maketouDownloadUrl) {
+            btnAchat.href = data.maketouDownloadUrl;
+          } else {
+            // Si Maketou n'a pas encore injecté de direct URL, lien vers l'espace client ou ouverture de l'e-mail
+            btnAchat.href = "https://maketou.net";
+            btnAchat.onclick = function() {
+              alert("Votre guide PDF a été envoyé directement sur votre boîte e-mail (" + (data.customerEmail || "votre e-mail") + ") par Maketou. Pensez à vérifier vos dossiers Réception et Spams !");
+            };
+          }
+        } else {
+          // Si le paiement est en cours de validation par l'opérateur (waiting_payment), on réessaie 4 fois
+          if (attempts < 4) {
+            setTimeout(() => {
+              verifyOrder(cid, attempts + 1);
+            }, 2500);
+          } else {
+            // Paiement non validé : redirection vers l'accueil sans afficher le bouton
+            window.location.replace('/');
+          }
+        }
+      } catch (err) {
+        if (attempts < 2) {
+          setTimeout(() => {
+            verifyOrder(cid, attempts + 1);
+          }, 2500);
+        } else {
+          window.location.replace('/');
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

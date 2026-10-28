@@ -15,6 +15,10 @@
       "dest": "server.js"
     },
     {
+      "src": "/confirmation-achat",
+      "dest": "server.js"
+    },
+    {
       "handle": "filesystem"
     },
     {
