@@ -143,6 +143,7 @@
     (async function() {
       const urlParams = new URLSearchParams(window.location.search);
       const isSetupPixel = urlParams.get('setup_pixel') === '1' || urlParams.get('setup') === '1';
+      const isDemoMode = urlParams.get('demo') === '1';
 
       const stateLoading = document.getElementById('state-loading');
       const stateSuccess = document.getElementById('state-success');
@@ -151,6 +152,34 @@
       const btnAchat = document.getElementById('btn-achat-confirme');
       const countdownEl = document.getElementById('countdown-val');
       const confirmUserMsg = document.getElementById('confirm-user-msg');
+
+      // ======================================================================
+      // MODE TEST / DÉMO SÉCURISÉ (?demo=1)
+      // Visualisation exacte du parcours client réel (carte + compte à rebours 1s + redirection)
+      // SANS risque financier ni pollution des conversions réelles Meta Ads
+      // ======================================================================
+      if (isDemoMode) {
+        stateLoading.classList.add('hidden');
+        stateSuccess.classList.remove('hidden');
+        redirectBanner.classList.remove('hidden');
+        const targetUrl = "https://maketou.net";
+        btnAchat.href = targetUrl;
+
+        console.log('[Mode Démo Actif] Simulation du parcours client sans prélèvement.');
+
+        let timeLeft = 1;
+        const timer = setInterval(() => {
+          timeLeft--;
+          if (countdownEl && timeLeft >= 0) {
+            countdownEl.textContent = timeLeft + 's';
+          }
+          if (timeLeft <= 0) {
+            clearInterval(timer);
+            window.location.href = targetUrl;
+          }
+        }, 1000);
+        return;
+      }
 
       // ======================================================================
       // MODE A — CONFIGURATION MANUELLE DU PIXEL DANS L'OUTIL META (?setup_pixel=1)
