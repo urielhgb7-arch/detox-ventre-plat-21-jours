@@ -15,7 +15,9 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Stockage persistant léger JSON pour les commandes et l'idempotence
-const DB_FILE = path.join(__dirname, 'orders_db.json');
+const DB_FILE = process.env.VERCEL 
+  ? path.join('/tmp', 'orders_db.json') 
+  : path.join(__dirname, 'orders_db.json');
 let ordersDB = {};
 
 if (fs.existsSync(DB_FILE)) {
@@ -397,12 +399,16 @@ app.get('/verify-purchase', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'verify-purchase.html'));
 });
 
-app.listen(PORT, () => {
-  console.log(`=======================================================`);
-  console.log(`🚀 Tunnel Détox 21 Jours en ligne sur le port ${PORT}`);
-  console.log(`🌐 Accès local : http://localhost:${PORT}`);
-  console.log(`📦 Produit ID : ${process.env.PRODUCT_DOCUMENT_ID || '57b7e371-6c0c-4262-bc58-e4cfe48da606'}`);
-  console.log(`💰 Tarif promo : 2 500 FCFA (au lieu de 10 000 FCFA, -75 %)`);
-  console.log(`🔒 Zéro emoji hors témoignages & API Maketou connectée`);
-  console.log(`=======================================================`);
-});
+if (require.main === module || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`=======================================================`);
+    console.log(`🚀 Tunnel Détox 21 Jours en ligne sur le port ${PORT}`);
+    console.log(`🌐 Accès local : http://localhost:${PORT}`);
+    console.log(`📦 Produit ID : ${process.env.PRODUCT_DOCUMENT_ID || '57b7e371-6c0c-4262-bc58-e4cfe48da606'}`);
+    console.log(`💰 Tarif promo : 2 500 FCFA (au lieu de 10 000 FCFA, -75 %)`);
+    console.log(`🔒 Zéro emoji hors témoignages & API Maketou connectée`);
+    console.log(`=======================================================`);
+  });
+}
+
+module.exports = app;

@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: detox-ventre-plat-21-jours
+    runtime: node
+    plan: free
+    region: frankfurt
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: PORT
+        value: 10000
+      - key: NODE_ENV
+        value: production
+      - key: MAKETOU_API_KEY
+        sync: false
+      - key: PRODUCT_DOCUMENT_ID
+        value: 57b7e371-6c0c-4262-bc58-e4cfe48da606
+      - key: PRODUCT_PRICE_XOF
+        value: 2500
+      - key: PRODUCT_OLD_PRICE_XOF
+        value: 10000
+      - key: META_PIXEL_ID
+        value: 1697536258749199
+      - key: META_ACCESS_TOKEN
+        sync: false
+      - key: VERIFY_TOKEN_SECRET
+        sync: false
+      - key: STORE_URL
+        sync: false
