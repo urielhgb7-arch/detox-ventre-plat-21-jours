@@ -136,9 +136,9 @@ async function sendMetaCapiPurchaseOnce(order, clientIp, clientUserAgent) {
         },
         custom_data: {
           currency: 'XOF',
-          value: order.amount || 2500,
+          value: order.amount || 1500,
           content_name: 'Programme Détox & Ventre Plat en 21 Jours',
-          content_ids: [order.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '57b7e371-6c0c-4262-bc58-e4cfe48da606'],
+          content_ids: [order.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b'],
           content_type: 'product',
           num_items: 1
         }
@@ -195,7 +195,7 @@ function watchMaketouCartStatus(cartId, apiKey) {
 app.post('/api/checkout/create', async (req, res) => {
   try {
     const { fullName, email, phone, fbp, fbc } = req.body;
-    const productDocumentId = process.env.PRODUCT_DOCUMENT_ID || '57b7e371-6c0c-4262-bc58-e4cfe48da606';
+    const productDocumentId = process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b';
     const apiKey = process.env.MAKETOU_API_KEY || 'msk_c650508aa6e29d8d7da5a9c2ea05cd20d081f29a89566fe1e3da0b79c080a4c8';
 
     if (!fullName || !email || !phone) {
@@ -256,7 +256,7 @@ app.post('/api/checkout/create', async (req, res) => {
         productSlug: 'detox-21-jours',
         internalOrderId: String(orderId),
         source: 'custom_sales_page',
-        amountXOF: String(process.env.PRODUCT_PRICE_XOF || '2500'),
+        amountXOF: String(process.env.PRODUCT_PRICE_XOF || '1500'),
         fbp: fbp || '',
         fbc: fbc || ''
       }
@@ -302,7 +302,7 @@ app.post('/api/checkout/create', async (req, res) => {
       firstName,
       lastName,
       productDocumentId,
-      amount: parseInt(process.env.PRODUCT_PRICE_XOF || '2500', 10),
+      amount: parseInt(process.env.PRODUCT_PRICE_XOF || '1500', 10),
       currency: 'XOF',
       status: cart.status || 'waiting_payment',
       redirectUrl: redirectUrl,
@@ -434,8 +434,8 @@ app.get('/api/checkout/verify', async (req, res) => {
         phone: cart?.customerInfo?.phone || cart?.phone || '',
         firstName: cart?.customerInfo?.firstName || cart?.firstName || '',
         lastName: cart?.customerInfo?.lastName || cart?.lastName || '',
-        productDocumentId: cart?.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '57b7e371-6c0c-4262-bc58-e4cfe48da606',
-        amount: 2500,
+        productDocumentId: cart?.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b',
+        amount: 1500,
         status: 'completed',
         purchaseTracked: false,
         purchase_tracked: 0
@@ -524,7 +524,7 @@ app.post('/api/test/simulate-completed', (req, res) => {
       cartId: orderId,
       status: 'completed',
       email: 'client@example.com',
-      amount: 2500,
+      amount: 1500,
       purchase_tracked: 0
     };
   }
@@ -626,8 +626,8 @@ if (require.main === module || !process.env.VERCEL) {
     console.log(`=======================================================`);
     console.log(`🚀 Tunnel Détox 21 Jours en ligne sur le port ${PORT}`);
     console.log(`🌐 Accès local : http://localhost:${PORT}`);
-    console.log(`📦 Produit ID : ${process.env.PRODUCT_DOCUMENT_ID || '57b7e371-6c0c-4262-bc58-e4cfe48da606'}`);
-    console.log(`💰 Tarif promo : 2 500 FCFA (au lieu de 10 000 FCFA, -75 %)`);
+    console.log(`📦 Produit ID : ${process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b'}`);
+    console.log(`💰 Tarif promo : 1 500 FCFA (au lieu de 10 000 FCFA, -85 %)`);
     console.log(`🔒 Zéro emoji hors témoignages & API Maketou connectée`);
     console.log(`=======================================================`);
   });
