@@ -64,7 +64,7 @@
         <span>MODE CONFIGURATION PIXEL META ACTIF</span>
       </div>
       <p class="text-[11px] text-amber-900 mt-1 leading-snug">
-        Outil de configuration d'événements Meta : Vous pouvez associer l'événement <strong>Achat (Purchase)</strong> soit sur l'URL <code>/remerciement</code>, soit sur le bouton <code>#btn-telecharger-guide</code>. Pour la valeur, sélectionnez le montant <code>1 200 FCFA</code> ci-dessous.
+        Outil de configuration d'événements Meta : Vous pouvez associer l'événement <strong>Achat (Purchase)</strong> soit sur l'URL <code>/remerciement</code>, soit sur le bouton <code>#btn-telecharger-guide</code>. Pour la valeur, sélectionnez le montant <code>2 500 FCFA</code> ci-dessous.
       </p>
     </div>
 
@@ -81,7 +81,7 @@
       <!-- Badge Officiel Paiement Confirmé -->
       <div>
         <span class="inline-block bg-green-100 text-green-800 text-xs font-black uppercase px-4 py-1.5 rounded-full border border-green-300 tracking-wide">
-          PAIEMENT DE <span id="meta-event-price" class="meta-event-price font-black" data-value="1200" data-currency="XOF">1 200 FCFA</span> CONFIRMÉ
+          PAIEMENT DE <span id="meta-event-price" class="meta-event-price font-black" data-value="2500" data-currency="XOF">2 500 FCFA</span> CONFIRMÉ
         </span>
       </div>
 
@@ -134,8 +134,8 @@
         <div class="flex justify-between items-center pb-2 border-b border-slate-200">
           <span class="text-slate-500">Montant payé :</span>
           <span class="font-black text-green-700 text-sm">
-            <span id="product-price-val" data-value="1200" data-currency="XOF">1 200 FCFA</span>
-            <span class="text-[10px] text-slate-400 font-normal line-through ml-1.5">10 000 F (-88%)</span>
+            <span id="product-price-val" data-value="2500" data-currency="XOF">2 500 FCFA</span>
+            <span class="text-[10px] text-slate-400 font-normal line-through ml-1.5">10 000 F (-75%)</span>
           </span>
         </div>
         <div class="flex justify-between items-center pb-2 border-b border-slate-200">
@@ -220,10 +220,10 @@
           const eventId = 'pur_' + (cartId || ('s_' + Date.now()));
           if (typeof fbq === 'function') {
             fbq('track', 'Purchase', {
-              value: 1200,
+              value: 2500,
               currency: 'XOF',
               content_name: 'Programme Détox & Ventre Plat en 21 Jours',
-              content_ids: ['3b25e32d-d421-4631-ae7c-767d48cab86b'],
+              content_ids: ['57b7e371-6c0c-4262-bc58-e4cfe48da606'],
               content_type: 'product',
               num_items: 1
             }, { eventID: eventId });
@@ -232,9 +232,9 @@
           if (typeof ttq === 'object') {
             ttq.track('CompletePayment', {
               content_name: 'Programme Détox & Ventre Plat en 21 Jours',
-              content_id: '3b25e32d-d421-4631-ae7c-767d48cab86b',
+              content_id: '57b7e371-6c0c-4262-bc58-e4cfe48da606',
               content_type: 'product',
-              value: 1200,
+              value: 2500,
               currency: 'XOF'
             }, {
               event_id: eventId
@@ -275,7 +275,7 @@
           if (typeof ttq === 'object') {
             ttq.track('Download', {
               content_name: 'Programme Détox & Ventre Plat en 21 Jours',
-              content_id: '3b25e32d-d421-4631-ae7c-767d48cab86b'
+              content_id: '57b7e371-6c0c-4262-bc58-e4cfe48da606'
             });
           }
         };

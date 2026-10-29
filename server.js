@@ -242,9 +242,9 @@ async function sendMetaCapiPurchaseOnce(order, clientIp, clientUserAgent) {
         user_data: userData,
         custom_data: {
           currency: 'XOF',
-          value: order.amount || 1200,
+          value: order.amount || 2500,
           content_type: 'product',
-          content_ids: ['3b25e32d-d421-4631-ae7c-767d48cab86b'],
+          content_ids: ['57b7e371-6c0c-4262-bc58-e4cfe48da606'],
           content_name: 'Programme Détox & Ventre Plat en 21 Jours',
           num_items: 1,
           order_id: order.orderId || order.cartId
@@ -300,14 +300,14 @@ async function sendTikTokEventsApiPurchaseOnce(order, clientIp, clientUserAgent)
         properties: {
           contents: [
             {
-              content_id: order.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b',
+              content_id: order.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '57b7e371-6c0c-4262-bc58-e4cfe48da606',
               content_type: 'product',
               content_name: 'Programme Détox & Ventre Plat en 21 Jours',
               quantity: 1,
-              price: order.amount || 1200
+              price: order.amount || 2500
             }
           ],
-          value: order.amount || 1200,
+          value: order.amount || 2500,
           currency: 'XOF'
         }
       }
@@ -420,8 +420,8 @@ async function handleThankYouAccess(req, res) {
       phone: c?.customerInfo?.phone || c?.phone || '',
       firstName: c?.customerInfo?.firstName || c?.firstName || 'Client',
       lastName: c?.customerInfo?.lastName || c?.lastName || '',
-      productDocumentId: c?.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b',
-      amount: 1200,
+      productDocumentId: c?.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '57b7e371-6c0c-4262-bc58-e4cfe48da606',
+      amount: 2500,
       currency: 'XOF',
       status: 'completed',
       purchaseTracked: false,
@@ -514,7 +514,7 @@ async function handleGuideDownload(req, res) {
       L'accès à ce document PDF officiel nécessite une commande avec paiement validé par Mobile Money. Si vous avez déjà payé, veuillez utiliser le lien sécurisé reçu par e-mail ou recharger votre page de confirmation.
     </p>
     <a href="/" class="inline-block w-full py-3.5 bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs uppercase rounded-xl shadow-lg transition">
-      Commander mon guide (1 200 FCFA)
+      Commander mon guide (2 500 FCFA)
     </a>
   </div>
 </body>
@@ -568,7 +568,7 @@ app.use(express.static(path.join(__dirname, 'public'), { index: false }));
 app.post('/api/checkout/create', async (req, res) => {
   try {
     const { fullName, email, phone, fbp, fbc, ttp, ttclid } = req.body;
-    const productDocumentId = process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b';
+    const productDocumentId = process.env.PRODUCT_DOCUMENT_ID || '57b7e371-6c0c-4262-bc58-e4cfe48da606';
     const apiKey = process.env.MAKETOU_API_KEY || 'msk_c650508aa6e29d8d7da5a9c2ea05cd20d081f29a89566fe1e3da0b79c080a4c8';
 
     if (!fullName || !email || !phone) {
@@ -630,7 +630,7 @@ app.post('/api/checkout/create', async (req, res) => {
         productSlug: 'detox-21-jours',
         internalOrderId: String(orderId),
         source: 'custom_sales_page',
-        amountXOF: String(process.env.PRODUCT_PRICE_XOF || '1200'),
+        amountXOF: String(process.env.PRODUCT_PRICE_XOF || '2500'),
         fbp: fbp || '',
         fbc: fbc || ''
       }
@@ -676,7 +676,7 @@ app.post('/api/checkout/create', async (req, res) => {
       firstName,
       lastName,
       productDocumentId,
-      amount: parseInt(process.env.PRODUCT_PRICE_XOF || '1200', 10),
+      amount: parseInt(process.env.PRODUCT_PRICE_XOF || '2500', 10),
       currency: 'XOF',
       status: cart.status || 'waiting_payment',
       redirectUrl: redirectUrl,
@@ -779,8 +779,8 @@ app.get('/api/checkout/verify', async (req, res) => {
         phone: cart?.customerInfo?.phone || cart?.phone || '',
         firstName: cart?.customerInfo?.firstName || cart?.firstName || '',
         lastName: cart?.customerInfo?.lastName || cart?.lastName || '',
-        productDocumentId: cart?.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b',
-        amount: 1200,
+        productDocumentId: cart?.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '57b7e371-6c0c-4262-bc58-e4cfe48da606',
+        amount: 2500,
         status: 'completed',
         purchaseTracked: false,
         purchase_tracked: 0,
@@ -866,7 +866,7 @@ app.post('/api/test/simulate-completed', (req, res) => {
       status: 'completed',
       paidToken: paidToken,
       email: 'client@example.com',
-      amount: 1200,
+      amount: 2500,
       currency: 'XOF',
       purchase_tracked: 0
     };
@@ -913,8 +913,8 @@ if (require.main === module || !process.env.VERCEL) {
     console.log(`=======================================================`);
     console.log(`🚀 Tunnel Détox 21 Jours en ligne sur le port ${PORT}`);
     console.log(`🌐 Accès local : http://localhost:${PORT}`);
-    console.log(`📦 Produit ID : ${process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b'}`);
-    console.log(`💰 Tarif promo : 1 200 FCFA (au lieu de 10 000 FCFA, -88 %)`);
+    console.log(`📦 Produit ID : ${process.env.PRODUCT_DOCUMENT_ID || '57b7e371-6c0c-4262-bc58-e4cfe48da606'}`);
+    console.log(`💰 Tarif promo : 2 500 FCFA (au lieu de 10 000 FCFA, -75 %)`);
     console.log(`🔒 Protection anti-fraude SHA-256 HMAC activée`);
     console.log(`=======================================================`);
   });
