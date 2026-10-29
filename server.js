@@ -136,7 +136,7 @@ async function sendMetaCapiPurchaseOnce(order, clientIp, clientUserAgent) {
         },
         custom_data: {
           currency: 'XOF',
-          value: order.amount || 1500,
+          value: order.amount || 1200,
           content_name: 'Programme Détox & Ventre Plat en 21 Jours',
           content_ids: [order.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b'],
           content_type: 'product',
@@ -256,7 +256,7 @@ app.post('/api/checkout/create', async (req, res) => {
         productSlug: 'detox-21-jours',
         internalOrderId: String(orderId),
         source: 'custom_sales_page',
-        amountXOF: String(process.env.PRODUCT_PRICE_XOF || '1500'),
+        amountXOF: String(process.env.PRODUCT_PRICE_XOF || '1200'),
         fbp: fbp || '',
         fbc: fbc || ''
       }
@@ -302,7 +302,7 @@ app.post('/api/checkout/create', async (req, res) => {
       firstName,
       lastName,
       productDocumentId,
-      amount: parseInt(process.env.PRODUCT_PRICE_XOF || '1500', 10),
+      amount: parseInt(process.env.PRODUCT_PRICE_XOF || '1200', 10),
       currency: 'XOF',
       status: cart.status || 'waiting_payment',
       redirectUrl: redirectUrl,
@@ -435,7 +435,7 @@ app.get('/api/checkout/verify', async (req, res) => {
         firstName: cart?.customerInfo?.firstName || cart?.firstName || '',
         lastName: cart?.customerInfo?.lastName || cart?.lastName || '',
         productDocumentId: cart?.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b',
-        amount: 1500,
+        amount: 1200,
         status: 'completed',
         purchaseTracked: false,
         purchase_tracked: 0
@@ -524,7 +524,7 @@ app.post('/api/test/simulate-completed', (req, res) => {
       cartId: orderId,
       status: 'completed',
       email: 'client@example.com',
-      amount: 1500,
+      amount: 1200,
       purchase_tracked: 0
     };
   }
@@ -627,7 +627,7 @@ if (require.main === module || !process.env.VERCEL) {
     console.log(`🚀 Tunnel Détox 21 Jours en ligne sur le port ${PORT}`);
     console.log(`🌐 Accès local : http://localhost:${PORT}`);
     console.log(`📦 Produit ID : ${process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b'}`);
-    console.log(`💰 Tarif promo : 1 500 FCFA (au lieu de 10 000 FCFA, -85 %)`);
+    console.log(`💰 Tarif promo : 1 200 FCFA (au lieu de 10 000 FCFA, -88 %)`);
     console.log(`🔒 Zéro emoji hors témoignages & API Maketou connectée`);
     console.log(`=======================================================`);
   });
