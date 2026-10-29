@@ -66,6 +66,46 @@ function verifyHmacSignature(orderId, sig) {
   }
 }
 
+// Token de téléchargement sécurisé temporaire (valable 4 heures)
+function generateDownloadToken(id) {
+  const timestamp = Math.floor(Date.now() / 1000);
+  const data = `${id}:${timestamp}`;
+  const hmac = crypto
+    .createHmac('sha256', process.env.ORDER_HMAC_SECRET || 'maketou_andromeda_hmac_secret_2026_x99')
+    .update(data)
+    .digest('hex');
+  return Buffer.from(`${data}:${hmac}`).toString('base64url');
+}
+
+function verifyDownloadToken(token) {
+  if (!token) return false;
+  try {
+    const decoded = Buffer.from(token, 'base64url').toString('utf8');
+    const parts = decoded.split(':');
+    if (parts.length !== 3) return false;
+    const [id, timestampStr, hmac] = parts;
+    const timestamp = parseInt(timestampStr, 10);
+    const now = Math.floor(Date.now() / 1000);
+    // Valide pendant 4 heures (14400 secondes)
+    if (isNaN(timestamp) || now - timestamp > 14400 || timestamp > now + 300) {
+      return false;
+    }
+    const expectedHmac = crypto
+      .createHmac('sha256', process.env.ORDER_HMAC_SECRET || 'maketou_andromeda_hmac_secret_2026_x99')
+      .update(`${id}:${timestamp}`)
+      .digest('hex');
+    return crypto.timingSafeEqual(Buffer.from(expectedHmac), Buffer.from(hmac));
+  } catch (e) {
+    return false;
+  }
+}
+
+function getCookieFromHeader(header, name) {
+  if (!header) return '';
+  const match = header.match(new RegExp('(?:^|; )' + name.replace(/([.$?*|{}()[\]\\/+^])/g, '\\$1') + '=([^;]*)'));
+  return match ? decodeURIComponent(match[1].trim()) : '';
+}
+
 function formatAfricanPhone(rawPhone) {
   let cleaned = String(rawPhone || '').replace(/[^0-9]/g, '');
   // Si déjà avec indicatif 229
@@ -235,10 +275,11 @@ app.post('/api/checkout/create', async (req, res) => {
     const proto = req.headers['x-forwarded-proto'] || (req.secure ? 'https' : 'http');
     const baseDomain = (process.env.APP_BASE_URL || (proto + '://' + host)).replace(/\/$/, '');
 
-    let redirectURL = `https://detox-21-jours.aurakadre.com/remerciement?orderId=${orderId}`;
+    const sig = generateHmacSignature(orderId);
+    let redirectURL = `https://detox-21-jours.aurakadre.com/remerciement?orderId=${encodeURIComponent(orderId)}&sig=${sig}`;
     let webhookUrl = undefined;
     if (baseDomain.startsWith('https://') && !baseDomain.includes('localhost')) {
-      redirectURL = `${baseDomain}/remerciement?orderId=${orderId}`;
+      redirectURL = `${baseDomain}/remerciement?orderId=${encodeURIComponent(orderId)}&sig=${sig}`;
       webhookUrl = `${baseDomain}/api/webhooks/maketou`;
     }
 
@@ -313,7 +354,8 @@ app.post('/api/checkout/create', async (req, res) => {
       fbc: fbc || '',
       eventSourceUrl: redirectURL,
       clientIp: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
-      clientUserAgent: req.headers['user-agent']
+      clientUserAgent: req.headers['user-agent'],
+      sig: sig
     };
 
     ordersDB[orderId] = orderData;
@@ -332,12 +374,14 @@ app.post('/api/checkout/create', async (req, res) => {
         res.cookie('maketou_cart_id', cart.id, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
       }
       res.cookie('maketou_order_id', orderId, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
+      res.cookie('maketou_sig', sig, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
     } catch (e) {}
 
     return res.status(200).json({
       cartId: cart.id,
       redirectUrl: redirectUrl,
       orderId: orderId,
+      sig: sig,
       paymentId: cart.paymentId || ''
     });
   } catch (err) {
@@ -553,6 +597,56 @@ app.post('/api/webhooks/maketou', (req, res) => {
 // ============================================================================
 app.get('/api/download/guide', async (req, res) => {
   try {
+    const cookieHeader = req.headers.cookie || '';
+    const token = req.query.token || getCookieFromHeader(cookieHeader, 'download_token');
+    const orderId = req.query.orderId || getCookieFromHeader(cookieHeader, 'maketou_order_id');
+    const sig = req.query.sig || getCookieFromHeader(cookieHeader, 'maketou_sig');
+    const cartId = req.query.cartId || getCookieFromHeader(cookieHeader, 'maketou_cart_id');
+    const isSetupMode = req.query.setup_pixel === '1' || req.query.setup === '1';
+
+    // Contrôle d'accès strict : nécessite token valide, ou signature HMAC, ou commande en base, ou mode setup
+    let isAllowed = false;
+    if (isSetupMode) {
+      isAllowed = true;
+    } else if (token && verifyDownloadToken(token)) {
+      isAllowed = true;
+    } else if (orderId && sig && verifyHmacSignature(orderId, sig)) {
+      isAllowed = true;
+    } else if (cartId) {
+      const order = ordersDB[cartId] || Object.values(ordersDB).find(o => o.cartId === cartId);
+      if (order && (order.status === 'completed' || order.purchaseTracked)) {
+        isAllowed = true;
+      }
+    }
+
+    if (!isAllowed) {
+      console.warn(`[Security Alert] Tentative de téléchargement PDF non autorisé depuis IP: ${req.ip}`);
+      res.status(403);
+      return res.send(`<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Accès Refusé — Détox 21 Jours</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-50 min-h-screen flex items-center justify-center p-4 font-sans text-slate-800">
+  <div class="max-w-md w-full bg-white rounded-2xl shadow-xl p-6 text-center border border-red-200">
+    <div class="w-14 h-14 bg-red-100 text-red-600 rounded-full flex items-center justify-center mx-auto mb-3">
+      <svg class="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
+    </div>
+    <h1 class="text-base font-black text-slate-900 mb-1">Téléchargement Réservé aux Membres</h1>
+    <p class="text-xs text-slate-600 mb-4 leading-relaxed">
+      L'accès direct à ce guide PDF nécessite une commande validée. Si vous avez déjà effectué votre paiement, veuillez utiliser le lien sécurisé envoyé dans votre boîte e-mail ou sur votre page de confirmation d'achat.
+    </p>
+    <a href="/" class="inline-block w-full py-3 bg-emerald-700 hover:bg-emerald-800 text-white font-extrabold text-xs rounded-xl shadow transition">
+      Commander mon guide (1 200 FCFA)
+    </a>
+  </div>
+</body>
+</html>`);
+    }
+
     const localPdfPath = path.join(__dirname, 'storage', 'guide_detox_21_jours.pdf');
     const isDownload = req.query.download === '1';
 
@@ -594,27 +688,49 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
 
-// Page officielle de Remerciement & Téléchargement du Guide
-app.get('/remerciement', (req, res) => {
-  if (req.query.cartId) {
-    res.cookie('maketou_cart_id', req.query.cartId, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
+// Middleware de protection et d'attribution du jeton sur la page de remerciement
+function handleThankYouAccess(req, res) {
+  const isSetupPixel = req.query.setup_pixel === '1' || req.query.setup === '1';
+  if (isSetupPixel) {
+    return res.sendFile(path.join(__dirname, 'public', 'remerciement.html'));
   }
-  if (req.query.orderId) {
-    res.cookie('maketou_order_id', req.query.orderId, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
-  }
-  res.sendFile(path.join(__dirname, 'public', 'remerciement.html'));
-});
 
-// Page /confirmation-achat (Alias rétro-compatible pointant sur la page de remerciement)
-app.get('/confirmation-achat', (req, res) => {
-  if (req.query.cartId) {
-    res.cookie('maketou_cart_id', req.query.cartId, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
+  const cookieHeader = req.headers.cookie || '';
+  const cartId = req.query.cartId || getCookieFromHeader(cookieHeader, 'maketou_cart_id') || '';
+  const orderId = req.query.orderId || getCookieFromHeader(cookieHeader, 'maketou_order_id') || '';
+  const sig = req.query.sig || getCookieFromHeader(cookieHeader, 'maketou_sig') || '';
+
+  // 1. Contrôle par signature cryptographique HMAC
+  let isAuthorized = false;
+  if (orderId && sig && verifyHmacSignature(orderId, sig)) {
+    isAuthorized = true;
+  } else if (cartId) {
+    // Vérification de l'existence du panier
+    const order = ordersDB[cartId] || Object.values(ordersDB).find(o => o.cartId === cartId);
+    if (order) {
+      isAuthorized = true;
+    }
   }
-  if (req.query.orderId) {
-    res.cookie('maketou_order_id', req.query.orderId, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
+
+  // 2. Si aucune preuve valide : blocage et redirection vers la page de vente
+  if (!isAuthorized) {
+    console.warn(`[Security Alert] Accès refusé à /remerciement (aucun achat valide). Redirection vers / depuis IP: ${req.ip}`);
+    return res.redirect('/?access_denied=1');
   }
-  res.sendFile(path.join(__dirname, 'public', 'remerciement.html'));
-});
+
+  // 3. Délivrance du jeton de téléchargement temporaire
+  const primaryId = orderId || cartId || 'order_' + Date.now();
+  const downloadToken = generateDownloadToken(primaryId);
+  res.cookie('download_token', downloadToken, { maxAge: 14400000, httpOnly: false, sameSite: 'lax', path: '/' });
+  if (cartId) res.cookie('maketou_cart_id', cartId, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
+  if (orderId) res.cookie('maketou_order_id', orderId, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
+  if (sig) res.cookie('maketou_sig', sig, { maxAge: 86400000, httpOnly: false, sameSite: 'lax', path: '/' });
+
+  return res.sendFile(path.join(__dirname, 'public', 'remerciement.html'));
+}
+
+app.get('/remerciement', handleThankYouAccess);
+app.get('/confirmation-achat', handleThankYouAccess);
 
 // Alias rétro-compatible
 app.get('/verify-purchase', (req, res) => {

@@ -411,6 +411,28 @@
     })();
 
     // 1. Scroll intelligent vers le formulaire avec focus automatique
+    
+    // Alerte accès direct interdit à la page de remerciement
+    (function checkAccessDenied() {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get('access_denied') === '1' || params.get('unauthorized') === '1') {
+        const banner = document.createElement('div');
+        banner.className = 'max-w-xl mx-auto my-2 px-3';
+        banner.innerHTML = `
+          <div class="bg-amber-50 border-2 border-amber-300 text-amber-950 p-3.5 rounded-2xl text-xs font-medium shadow-md flex items-start gap-2.5">
+            <svg class="w-5 h-5 text-amber-600 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+            <div>
+              <strong class="font-black text-amber-900 block mb-0.5 uppercase tracking-wide">Accès Réservé aux Membres</strong>
+              La page de téléchargement nécessite une commande validée. Pour recevoir votre guide immédiatement, veuillez compléter le court formulaire sécurisé ci-dessous.
+            </div>
+          </div>
+        `;
+        const main = document.querySelector('main');
+        if (main) main.parentNode.insertBefore(banner, main);
+        setTimeout(scrollToForm, 700);
+      }
+    })();
+
     function scrollToForm() {
       const form = document.getElementById('paiement');
       form.scrollIntoView({ behavior: 'smooth' });
@@ -544,6 +566,10 @@
             localStorage.setItem('maketou_order_id', data.orderId);
             sessionStorage.setItem('maketou_order_id', data.orderId);
             document.cookie = "maketou_order_id=" + encodeURIComponent(data.orderId) + "; path=/; max-age=86400; SameSite=Lax";
+            if (data.sig) {
+              document.cookie = "maketou_sig=" + encodeURIComponent(data.sig) + "; path=/; max-age=86400; SameSite=Lax";
+              sessionStorage.setItem("maketou_sig", data.sig);
+            }
           } catch(e) {}
         }
 

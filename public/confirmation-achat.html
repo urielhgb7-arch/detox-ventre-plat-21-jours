@@ -173,43 +173,65 @@
 
   <script>
     (function() {
+      function getCookie(name) {
+        const value = '; ' + document.cookie;
+        const parts = value.split('; ' + name + '=');
+        if (parts.length === 2) return decodeURIComponent(parts.pop().split(';').shift().trim());
+        return '';
+      }
+
       const urlParams = new URLSearchParams(window.location.search);
       const isSetupPixel = urlParams.get('setup_pixel') === '1' || urlParams.get('setup') === '1';
       const setupBanner = document.getElementById('setup-banner');
       const btnDownload = document.getElementById('btn-telecharger-guide');
       const btnAlias = document.getElementById('btn-achat-confirme');
 
+      const cartId = urlParams.get('cartId') || getCookie('maketou_cart_id') || '';
+      const orderId = urlParams.get('orderId') || getCookie('maketou_order_id') || '';
+      const sig = urlParams.get('sig') || getCookie('maketou_sig') || '';
+      const token = urlParams.get('token') || getCookie('download_token') || '';
+
       // 1. Gestion du mode Configuration du Pixel Meta (?setup_pixel=1)
       if (isSetupPixel && setupBanner) {
         setupBanner.classList.remove('hidden');
       }
 
-      // 2. Déclenchement automatique de l'événement Purchase Meta Pixel
-      const cartId = urlParams.get('cartId') || urlParams.get('orderId') || 'p_' + Date.now();
-      const eventId = 'pur_' + cartId;
-
-      if (typeof fbq === 'function') {
-        fbq('track', 'Purchase', {
-          value: 1200,
-          currency: 'XOF',
-          content_name: 'Programme Détox & Ventre Plat en 21 Jours',
-          content_ids: ['guide-detox-21-jours'],
-          content_type: 'product',
-          num_items: 1
-        }, { eventID: eventId });
-        console.log('[Meta Pixel] Événement Purchase déclenché :', eventId);
+      // 2. Déclenchement automatique et sécurisé du Pixel Meta Purchase
+      const isAuthorized = (orderId && sig) || cartId || isSetupPixel;
+      if (isAuthorized && typeof fbq === 'function') {
+        const purchaseKey = 'pur_tracked_' + (orderId || cartId || 'setup');
+        if (!sessionStorage.getItem(purchaseKey)) {
+          const eventId = 'pur_' + (orderId || cartId || ('s_' + Date.now()));
+          fbq('track', 'Purchase', {
+            value: 1200,
+            currency: 'XOF',
+            content_name: 'Programme Détox & Ventre Plat en 21 Jours',
+            content_ids: ['guide-detox-21-jours'],
+            content_type: 'product',
+            num_items: 1
+          }, { eventID: eventId });
+          sessionStorage.setItem(purchaseKey, '1');
+          console.log('[Meta Pixel] Événement Purchase déclenché :', eventId);
+        }
       }
 
-      // 3. Action de Téléchargement & Ouverture du Guide
-      // La sécurité est totale : l'URL Google Drive n'est jamais exposée dans le frontend.
-      // Le flux binaire PDF est diffusé directement par notre serveur backend sécurisé.
+      // 3. Action de Téléchargement & Ouverture du Guide avec Token Sécurisé
       if (btnDownload) {
         btnDownload.onclick = function(e) {
           e.preventDefault();
-          
-          // Téléchargement du fichier PDF
+
+          let queryParams = '';
+          if (token) {
+            queryParams = '&token=' + encodeURIComponent(token);
+          } else if (orderId && sig) {
+            queryParams = '&orderId=' + encodeURIComponent(orderId) + '&sig=' + encodeURIComponent(sig);
+          } else if (isSetupPixel) {
+            queryParams = '&setup_pixel=1';
+          }
+
+          // Téléchargement du fichier PDF sécurisé
           const downloadLink = document.createElement('a');
-          downloadLink.href = '/api/download/guide?download=1';
+          downloadLink.href = '/api/download/guide?download=1' + queryParams;
           downloadLink.download = 'Programme_Detox_Ventre_Plat_21_Jours.pdf';
           document.body.appendChild(downloadLink);
           downloadLink.click();
@@ -217,10 +239,9 @@
 
           // Ouverture simultanée du guide pour lecture immédiate
           setTimeout(function() {
-            window.open('/api/download/guide?action=view', '_blank');
+            window.open('/api/download/guide?action=view' + queryParams, '_blank');
           }, 300);
 
-          // Déclencheur supplémentaire pour l'outil Meta si configuré au clic
           if (typeof fbq === 'function') {
             fbq('trackCustom', 'DownloadGuideClick');
           }
