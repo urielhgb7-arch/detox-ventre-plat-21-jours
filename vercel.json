@@ -5,13 +5,17 @@
       "src": "server.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": ["public/**"]
+        "includeFiles": ["public/**", "storage/**"]
       }
     }
   ],
   "routes": [
     {
       "src": "/api/(.*)",
+      "dest": "server.js"
+    },
+    {
+      "src": "/remerciement",
       "dest": "server.js"
     },
     {
