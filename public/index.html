@@ -560,7 +560,9 @@
             email: email,
             phone: fullPhone,
             fbp: getCookie('_fbp'),
-            fbc: getCookie('_fbc')
+            fbc: getCookie('_fbc'),
+            ttp: getCookie('_ttp'),
+            ttclid: getCookie('ttclid') || new URLSearchParams(window.location.search).get('ttclid') || ''
           })
         });
 

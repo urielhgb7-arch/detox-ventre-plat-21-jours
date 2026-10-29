@@ -196,6 +196,73 @@ async function sendMetaCapiPurchaseOnce(order, clientIp, clientUserAgent) {
 }
 
 // Surveillance en arrière-plan du panier Maketou
+// ============================================================================
+// HELPER TIKTOK EVENTS API : ENVOI SERVEUR COMPLETEPAYMENT (CONVERSIONS API)
+// ============================================================================
+async function sendTikTokEventsApiPurchaseOnce(order, clientIp, clientUserAgent) {
+  if (!order || order.tiktokTracked || order.tiktok_tracked === 1) return;
+  order.tiktokTracked = true;
+  order.tiktok_tracked = 1;
+  order.tiktokTrackedAt = new Date().toISOString();
+  saveDB();
+
+  const eventId = `pur_${order.cartId || order.orderId}`;
+  const pixelId = process.env.TIKTOK_PIXEL_ID || 'DBHO283C77U8I4RJ1KK0';
+  const accessToken = process.env.TIKTOK_EVENTS_API_ACCESS_TOKEN || '768bb41690ef8c180f32ffa08d411063236a87d2';
+
+  const userObj = {
+    ip: clientIp || order.clientIp || undefined,
+    user_agent: clientUserAgent || order.clientUserAgent || undefined
+  };
+  if (order.email) userObj.email = hashMetaField(order.email);
+  if (order.phone) userObj.phone = hashMetaField(order.phone);
+  if (order.ttp) userObj.ttp = order.ttp;
+  if (order.ttclid) userObj.ttclid = order.ttclid;
+
+  const tiktokPayload = {
+    event_source: 'web',
+    event_source_id: pixelId,
+    data: [
+      {
+        event: 'CompletePayment',
+        event_time: Math.floor(Date.now() / 1000),
+        event_id: eventId,
+        user: userObj,
+        properties: {
+          contents: [
+            {
+              content_id: order.productDocumentId || process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b',
+              content_type: 'product',
+              content_name: 'Programme Détox & Ventre Plat en 21 Jours',
+              quantity: 1,
+              price: order.amount || 1200
+            }
+          ],
+          value: order.amount || 1200,
+          currency: 'XOF'
+        }
+      }
+    ]
+  };
+
+  try {
+    const ttRes = await axios.post(
+      'https://business-api.tiktok.com/open_api/v1.3/event/track/',
+      tiktokPayload,
+      {
+        headers: {
+          'Access-Token': accessToken,
+          'Content-Type': 'application/json'
+        },
+        timeout: 8000
+      }
+    );
+    console.log(`[TikTok Events API] Événement CompletePayment envoyé avec succès (${eventId}) :`, ttRes.data?.message || 'OK');
+  } catch (ttErr) {
+    console.warn('[TikTok Events API Warning]', ttErr.response?.data?.message || ttErr.message);
+  }
+}
+
 function watchMaketouCartStatus(cartId, apiKey) {
   if (!cartId || !apiKey) return;
   let attempts = 0;
@@ -221,6 +288,7 @@ function watchMaketouCartStatus(cartId, apiKey) {
         order.status = 'completed';
         saveDB();
         await sendMetaCapiPurchaseOnce(order);
+        await sendTikTokEventsApiPurchaseOnce(order);
         clearInterval(timer);
       }
     } catch (e) {
@@ -234,7 +302,7 @@ function watchMaketouCartStatus(cartId, apiKey) {
 // ============================================================================
 app.post('/api/checkout/create', async (req, res) => {
   try {
-    const { fullName, email, phone, fbp, fbc } = req.body;
+    const { fullName, email, phone, fbp, fbc, ttp, ttclid } = req.body;
     const productDocumentId = process.env.PRODUCT_DOCUMENT_ID || '3b25e32d-d421-4631-ae7c-767d48cab86b';
     const apiKey = process.env.MAKETOU_API_KEY || 'msk_c650508aa6e29d8d7da5a9c2ea05cd20d081f29a89566fe1e3da0b79c080a4c8';
 
@@ -352,6 +420,8 @@ app.post('/api/checkout/create', async (req, res) => {
       createdAt: new Date().toISOString(),
       fbp: fbp || '',
       fbc: fbc || '',
+      ttp: ttp || '',
+      ttclid: ttclid || '',
       eventSourceUrl: redirectURL,
       clientIp: req.headers['x-forwarded-for'] || req.socket.remoteAddress,
       clientUserAgent: req.headers['user-agent'],
@@ -496,6 +566,11 @@ app.get('/api/checkout/verify', async (req, res) => {
         req.headers['x-forwarded-for'] || req.socket.remoteAddress,
         req.headers['user-agent']
       );
+      await sendTikTokEventsApiPurchaseOnce(
+        order,
+        req.headers['x-forwarded-for'] || req.socket.remoteAddress,
+        req.headers['user-agent']
+      );
     }
 
     // Récupération de l'URL directe de livraison et téléchargement Maketou
@@ -545,6 +620,7 @@ app.post('/api/order/confirm-tracking', async (req, res) => {
   if (order.status !== 'completed') return res.status(400).json({ error: 'Paiement non validé' });
 
   await sendMetaCapiPurchaseOnce(order, req.headers['x-forwarded-for'] || req.socket.remoteAddress, req.headers['user-agent']);
+  await sendTikTokEventsApiPurchaseOnce(order, req.headers['x-forwarded-for'] || req.socket.remoteAddress, req.headers['user-agent']);
   return res.json({ success: true, eventId: `pur_${order.cartId || order.orderId}` });
 });
 
