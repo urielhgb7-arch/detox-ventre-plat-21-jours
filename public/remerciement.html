@@ -198,32 +198,37 @@
       const btnDownload = document.getElementById('btn-telecharger-guide');
       const btnAlias = document.getElementById('btn-achat-confirme');
 
-      const cartId = urlParams.get('cartId') || getCookie('maketou_cart_id') || '';
-      const orderId = urlParams.get('orderId') || getCookie('maketou_order_id') || '';
-      const sig = urlParams.get('sig') || getCookie('maketou_sig') || '';
-      const token = urlParams.get('token') || getCookie('download_token') || '';
+      const cartId = urlParams.get('cartId') || getCookie('paid_cart_id') || '';
+      const orderId = urlParams.get('orderId') || getCookie('pending_order_id') || '';
+      const token = urlParams.get('token') || getCookie('paid_token') || '';
 
-      // 1. Gestion du mode Configuration du Pixel Meta (?setup_pixel=1)
+      // 1. Contrôle d'accès strict côté client : redirection si aucun accès payé
+      if (!isSetupPixel && (!cartId || !token)) {
+        window.location.replace('/?access_denied=1');
+        return;
+      }
+
+      // Gestion du mode Configuration du Pixel Meta (?setup_pixel=1)
       if (isSetupPixel && setupBanner) {
         setupBanner.classList.remove('hidden');
       }
 
-      // 2. Déclenchement automatique et sécurisé du Pixel Meta Purchase
-      const isAuthorized = (orderId && sig) || cartId || isSetupPixel;
-      if (isAuthorized && typeof fbq === 'function') {
-        const purchaseKey = 'pur_tracked_' + (orderId || cartId || 'setup');
+      // 2. Déclenchement automatique et sécurisé du Pixel Meta & TikTok Purchase
+      if ((cartId && token) || isSetupPixel) {
+        const purchaseKey = 'pur_tracked_' + (cartId || 'setup');
         if (!sessionStorage.getItem(purchaseKey)) {
-          const eventId = 'pur_' + (orderId || cartId || ('s_' + Date.now()));
-          fbq('track', 'Purchase', {
-            value: 1200,
-            currency: 'XOF',
-            content_name: 'Programme Détox & Ventre Plat en 21 Jours',
-            content_ids: ['guide-detox-21-jours'],
-            content_type: 'product',
-            num_items: 1
-          }, { eventID: eventId });
-          sessionStorage.setItem(purchaseKey, '1');
-          console.log('[Meta Pixel] Événement Purchase déclenché :', eventId);
+          const eventId = 'pur_' + (cartId || ('s_' + Date.now()));
+          if (typeof fbq === 'function') {
+            fbq('track', 'Purchase', {
+              value: 1200,
+              currency: 'XOF',
+              content_name: 'Programme Détox & Ventre Plat en 21 Jours',
+              content_ids: ['3b25e32d-d421-4631-ae7c-767d48cab86b'],
+              content_type: 'product',
+              num_items: 1
+            }, { eventID: eventId });
+            console.log('[Meta Pixel] Événement Purchase déclenché :', eventId);
+          }
           if (typeof ttq === 'object') {
             ttq.track('CompletePayment', {
               content_name: 'Programme Détox & Ventre Plat en 21 Jours',
@@ -234,8 +239,9 @@
             }, {
               event_id: eventId
             });
-            console.log('[TikTok Pixel] Événement CompletePayment déclenché');
+            console.log('[TikTok Pixel] Événement CompletePayment déclenché :', eventId);
           }
+          sessionStorage.setItem(purchaseKey, '1');
         }
       }
 
@@ -244,26 +250,23 @@
         btnDownload.onclick = function(e) {
           e.preventDefault();
 
-          let queryParams = '';
-          if (token) {
-            queryParams = '&token=' + encodeURIComponent(token);
-          } else if (orderId && sig) {
-            queryParams = '&orderId=' + encodeURIComponent(orderId) + '&sig=' + encodeURIComponent(sig);
-          } else if (isSetupPixel) {
-            queryParams = '&setup_pixel=1';
-          }
+          let queryParams = '?download=1';
+          if (cartId) queryParams += '&cartId=' + encodeURIComponent(cartId);
+          if (token) queryParams += '&token=' + encodeURIComponent(token);
+          if (isSetupPixel) queryParams += '&setup_pixel=1';
 
           // Téléchargement du fichier PDF sécurisé
           const downloadLink = document.createElement('a');
-          downloadLink.href = '/api/download/guide?download=1' + queryParams;
+          downloadLink.href = '/api/download/guide' + queryParams;
           downloadLink.download = 'Programme_Detox_Ventre_Plat_21_Jours.pdf';
           document.body.appendChild(downloadLink);
           downloadLink.click();
           document.body.removeChild(downloadLink);
 
           // Ouverture simultanée du guide pour lecture immédiate
+          const viewParams = queryParams.replace('download=1', 'action=view');
           setTimeout(function() {
-            window.open('/api/download/guide?action=view' + queryParams, '_blank');
+            window.open('/api/download/guide' + viewParams, '_blank');
           }, 300);
 
           if (typeof fbq === 'function') {
@@ -272,7 +275,7 @@
           if (typeof ttq === 'object') {
             ttq.track('Download', {
               content_name: 'Programme Détox & Ventre Plat en 21 Jours',
-              content_id: 'guide-detox-21-jours'
+              content_id: '3b25e32d-d421-4631-ae7c-767d48cab86b'
             });
           }
         };

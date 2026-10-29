@@ -15,11 +15,11 @@
       "dest": "server.js"
     },
     {
-      "src": "/remerciement",
+      "src": "/remerciement(.*)",
       "dest": "server.js"
     },
     {
-      "src": "/confirmation-achat",
+      "src": "/confirmation-achat(.*)",
       "dest": "server.js"
     },
     {
